@@ -1,6 +1,11 @@
 ChangeLog File for Vim-Spell
 ----------------------------
 
+Ver 0.2d: 27th feb 2002 
+* The file is automatically saved before the parsing.
+* Help file updated
+  - Different updates
+
 Ver 0.2c: 25th feb 2002 
 * Still some dependencies reduced :
   - a.vim is added to the archive. The version is an old one that works with
@@ -10,7 +15,7 @@ Ver 0.2c: 25th feb 2002
   - The un-highlighting of ignored words has been fixed.
   - Ignored words are stored in a file in the ./.spell folder. Hence, they are
     still ignored when new words are added to the dictionary or when I/Aspell
-    is re-runned.
+    is re-run.
 * Bug fix 
   - Oddities should not show up anymore when proposing alternatives for a
     string present in several already noticed misspellings.
@@ -24,8 +29,8 @@ Ver 0.2b: 30th Jan 2002
     install (because it requires other plugins, etc), it is now possible to
     use Vim-Spell without Triggers.vim. As a consequence, the swapping
     language feature will be disabled. The detection of Triggers.vim is
-    completly transparent.
-  - dependencies towards a.vim and cat will remains.
+    completely transparent.
+  - dependencies toward a.vim and cat will remains.
 * The help message for the Corrector buffer exists can be hidden
 
 Ver 0.2: 27th Jan 2002 

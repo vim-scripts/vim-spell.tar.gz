@@ -7,15 +7,13 @@
 <PRE>
 # <A HREF="#VIM">VIM</A>: let <A HREF="#g:VS_language">g:VS_language</A> = 'american' 
 
-*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 25th feb 2002
+*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 27th feb 2002
 
 		<A HREF="#VIM">VIM</A> Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2c
+			VIM-Spell version 0.2d
 
 
 ------------------------------------------------------------------------------
-
-								*<A NAME="Presentation"></A><B>Presentation</B>*
 <B><FONT COLOR="PURPLE">Presentation: </FONT></B>
 
 VIM-Spell is a spell checker plugin for <A HREF="#VIM">VIM</A>. Actually it wraps external tools
@@ -76,13 +74,13 @@ instance :
 <B><FONT COLOR="PURPLE">Details about the features:</FONT></B>
   
 
-*<A NAME="Parse"></A><B>Parse</B>*		<A HREF="#Parse">Parse</A> the buffer for misspellings -- key binding (KB) : &lt;M-s&gt;r
+*<A NAME="Parse"></A><B>Parse</B>*		<A HREF="#Parse">Parse</A> the buffer for misspellings -- key binded (KB) : &lt;M-s&gt;r
   Main mode.
 
   This action issues two calls to |<A HREF="#IA-spell">IA-spell</A>|. It first updates the list of
-  misspelled words within the edited document, and then |<A HREF="#cache">cache</A>| their
+  misspelled words within the edited document, and then |cache|s their
   possible alternatives. It also |Highlight|s the misspellings.
-  Note: The current buffer must have been saved before calling |<A HREF="#IA-spell">IA-spell</A>|.
+  
   This must be done at least once before using the other features of this
   plugin. 
 
@@ -98,7 +96,7 @@ instance :
 *<A NAME="Jump"></A><B>Jump</B>*		<A HREF="#Jump">Jump</A> from one misspelling to the next/previous -- &lt;M-n&gt;, &lt;M-p&gt;
   Both modes.
 
-  Puts the cursor under the the next/previous misspelling.
+  Puts the cursor under the next/previous misspelling.
   In <A HREF="#corrector-mode">corrector-mode</A>, it also actuates the alternatives proposed to match the
   new current misspelling.
 
@@ -107,7 +105,7 @@ instance :
 *<A NAME="Exit"></A><B>Exit</B>*		<A HREF="#Exit">Exit</A> -- &lt;M-s&gt;E
   Both modes.
 
-  Closes the corrector window (if opened) and un-highlight the misspellings.
+  Closes the corrector window (if opened) and un-highlights the misspellings.
 
 
 
@@ -173,7 +171,7 @@ instance :
 
   The word is added to the file ./.spell/ignore-list. If you want to change
   some of the words, edit the file and remove the words you don't want to be
-  ignore anymore.
+  ignored anymore.
 
 
 
@@ -252,10 +250,10 @@ often erased, this will enable to manage smaller lists of words.
 <B><FONT COLOR="PURPLE">Installation notes: </FONT></B>
 
 <B><FONT COLOR="PURPLE">  Files of the plugin: </FONT></B>
-    The plugin is composed of 6 files plus this file and its HTML version :
+    The plugin is composed of 7 files plus this file and its HTML version :
       - VS-all.vim	: the file to be sourced, it sources the others ;
       - VS_deps.vim	: contains some commands that helps to reduce
-			  dependencies towards other <A HREF="#VIM">VIM</A> plugins ;
+			  dependencies toward other <A HREF="#VIM">VIM</A> plugins ;
       - VS_fm-fun.vim	: file management functions ;
       - VS_gui.vim	: functions relatives to the corrector GUI ;
       - VS_int-fun.vim	: internal function wrapping the calls to |<A HREF="#IA-spell">IA-spell</A>| ;
@@ -287,7 +285,6 @@ often erased, this will enable to manage smaller lists of words.
     into your $VIMRUNTIME/macros folder. I also suggest you take a look on a
     my page about &quot;File-type plugin emulation on <A HREF="#VIM">VIM</A> 5.xx&quot; for more
     explanations.
-	<A HREF="http://hermitte.free.fr/vim-beta/ftplugin.php3">http://hermitte.free.fr/vim-beta/ftplugin.php3</A> : still, but will move to
 	<A HREF="http://hermitte.free.fr/vim/ftplugin.php3">http://hermitte.free.fr/vim/ftplugin.php3</A>
 
 <B><FONT COLOR="PURPLE">  VIM 6.0</FONT></B>
@@ -314,7 +311,7 @@ often erased, this will enable to manage smaller lists of words.
 <B><FONT COLOR="PURPLE">  Last thing:</FONT></B>
     I'm aware that this plugin is quite complex. It is the price for all its
     features. It depends on external plugins and even external (but common for
-    <A HREF="#VIM">VIM</A> users I guess) tools. For maintenance aspects, it is composed on
+    <A HREF="#VIM">VIM</A> users I guess) tools. For maintenance aspects, it is composed of
     several inter-dependant files. And for compatibility reasons, I've chosen
     to use as few new <A HREF="#VIM">VIM</A> 6.0 features as possible.
 
@@ -352,11 +349,11 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
 
 
 *<A NAME="g:VS_aspell_add_directly_to_dict"></A><B>g:VS_aspell_add_directly_to_dict</B>* boolean (0/1)
-  This trick enable to quicken the insertion of words into the personal
+  This trick enables to quicken the insertion of words into the personal
   dictionary. I guess it will only work with |<A HREF="#Aspell">Aspell</A>|. I've tested this
-  approach with <A HREF="#Aspell">Aspell</A> .33.5 alpha ; I can't guarantee that it always work
-  with future versions of <A HREF="#Aspell">Aspell</A>. By default, this option is set to false (ie.
-  0).
+  approach with <A HREF="#Aspell">Aspell</A> .33.5 alpha ; I can't guarantee that it will always
+  work with future versions of <A HREF="#Aspell">Aspell</A>. By default, this option is set to false
+  (ie.  0).
   If you want to use it, please check :
   - You are using <A HREF="#Aspell">Aspell</A> or at least the format of your personal dictionary
     looks like : &quot;xxxx &lt;number_of_entries&gt;&quot; on the first line, while the
@@ -490,16 +487,16 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
      trigger -- extension of the <A HREF="#VIM">VIM</A> toggling feature. 
      This script is facultative. If installed, the language |<A HREF="#Swap">Swap</A>| ping
      feature will be automatically enabled.
-	<A HREF="http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim">http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim</A>
+	<A HREF="http://hermitte.free.fr/vim/general.php3#Triggers_vim">http://hermitte.free.fr/vim/general.php3#Triggers_vim</A>
     
 
     buffoption.vim					*<A NAME="buffoption"></A><B>buffoption</B>*
      This file is used to define buffer relative mappings with versions of <A HREF="#VIM">VIM</A>
      prior to the 6 series -- critical in that case. As, I write my mappings
      as &quot;noremap&quot;s, you should retrieve my patch from
-	<A HREF="http://hermitte.free.fr/vim-beta/ftplugin.php3#buffoptions2_vim">http://hermitte.free.fr/vim-beta/ftplugin.php3#buffoptions2_vim</A> you
+	<A HREF="http://hermitte.free.fr/vim/ftplugin.php3#buffoptions2_vim">http://hermitte.free.fr/vim/ftplugin.php3#buffoptions2_vim</A> you
      will also need : buffoptions_map2.vim and fileuptodate.vim. 
-     With the <A HREF="#VIM">VIM</A> 6 series, this file is no more required.
+     With the <A HREF="#VIM">VIM</A> 6 series, this file is no longer required.
     
   
 <B><FONT COLOR="PURPLE">  Other related VIM's plugins </FONT></B>
@@ -526,15 +523,24 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
 
 
     Matthias Veit's spellcheck.vim for <A HREF="#VIM">VIM</A> 6 (only ?)	*<A NAME="spellcheck"></A><B>spellcheck</B>*
-     Late addition to sourceforge. Require <A HREF="#Aspell">Aspell</A> and ruby =&gt; I haven't tested
-     it.  It seems that I permit much more things.
+     Require <A HREF="#Aspell">Aspell</A> and ruby =&gt; I haven't tested it.  It seems that I permit
+     much more things.
 	<A HREF="http://vim.sf.net/scripts/script.php?script_id=131">http://vim.sf.net/scripts/script.php?script_id=131</A>
 
 
     Johannes Zellner's Aspell.vim for <A HREF="#VIM">VIM</A> 6.0		*<A NAME="JZ"></A><B>JZ</B>*
      Another spellchecking plugin wrapping <A HREF="#Aspell">Aspell</A>.
-     &lt;htpp://www.zellner.org/vim/autoload/Aspell.vim&gt;
+	<A HREF="http://www.zellner.org/vim/autoload/Aspell.vim">http://www.zellner.org/vim/autoload/Aspell.vim</A>
 
+
+    Yegappan Lakshmanan's spell.vim			*<A NAME="YL"></A><B>YL</B>*
+     Plugin that wraps calls to the UNIX spellchecker : spell. It can also
+     parses selected text, and not only files. But no alternatives proposed.
+	<A HREF="http://vim.sf.net/scripts/script.php?script_id=232">http://vim.sf.net/scripts/script.php?script_id=232</A>
+
+    Text Processing With Integrated Spell Checking	
+     Presents different stuffs and another simple way to call <A HREF="#Aspell">Aspell</A> from <A HREF="#VIM">VIM</A>:
+	<A HREF="http://www.highley-recommended.com/text-processing.html">http://www.highley-recommended.com/text-processing.html</A>
 
 ------------------------------------------------------------------------------
  © Luc Hermitte, 2001-2002	<A HREF="http://hermitte.free.fr/vim">http://hermitte.free.fr/vim</A>

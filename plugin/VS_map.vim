@@ -4,8 +4,8 @@
 " File:		VS_gui-map.vim
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 " 		<URL:http://hermitte.free.fr/vim>
-" Ver:		0.2b
-" Last Update:	30th jan 2002
+" Ver:		0.2d
+" Last Update:	27th feb 2002
 "
 "===========================================================================
 "
@@ -14,7 +14,7 @@
 " Macros
 "===========================================================================
 "
-  noremap ¡VS_check!	:call VS_parse_file(expand('%:p'))<cr>
+  noremap ¡VS_check!	:update<cr>:call VS_parse_file(expand('%:p'))<cr>
   noremap ¡VS_showE!	:call VS_show_errors()<cr>
   noremap ¡VS_nextE!	:call VS_SpchkNext()<cr>
   noremap ¡VS_prevE!	:call VS_SpchkPrev()<cr>

@@ -1,12 +1,11 @@
 # VIM: let g:VS_language = 'american' 
-*VS_help.txt*	For Vim version 5.7.+	Last change: 25th feb 2002
+*VS_help.txt*	For Vim version 5.7.+	Last change: 27th feb 2002
 
 		VIM Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2c
+			VIM-Spell version 0.2d
 
 
 ------------------------------------------------------------------------------
-								*Presentation*
 Presentation: ~
 
 VIM-Spell is a spell checker plugin for VIM. Actually it wraps external tools
@@ -63,13 +62,13 @@ instance :
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 Details about the features:~
   
-*Parse*		Parse the buffer for misspellings -- key binding (KB) : <M-s>r
+*Parse*		Parse the buffer for misspellings -- key binded (KB) : <M-s>r
   Main mode.
 
   This action issues two calls to |IA-spell|. It first updates the list of
-  misspelled words within the edited document, and then |cache| their
+  misspelled words within the edited document, and then |cache|s their
   possible alternatives. It also |Highlight|s the misspellings.
-  Note: The current buffer must have been saved before calling |IA-spell|.
+  
   This must be done at least once before using the other features of this
   plugin. 
 
@@ -83,7 +82,7 @@ Details about the features:~
 *Jump*		Jump from one misspelling to the next/previous -- <M-n>, <M-p>
   Both modes.
 
-  Puts the cursor under the the next/previous misspelling.
+  Puts the cursor under the next/previous misspelling.
   In corrector-mode, it also actuates the alternatives proposed to match the
   new current misspelling.
 
@@ -91,7 +90,7 @@ Details about the features:~
 *Exit*		Exit -- <M-s>E
   Both modes.
 
-  Closes the corrector window (if opened) and un-highlight the misspellings.
+  Closes the corrector window (if opened) and un-highlights the misspellings.
 
 
 *Swap*		Swap the value of the current language -- <M-s>L
@@ -150,7 +149,7 @@ Details about the features:~
 
   The word is added to the file ./.spell/ignore-list. If you want to change
   some of the words, edit the file and remove the words you don't want to be
-  ignore anymore.
+  ignored anymore.
 
 
 *Add*		Add the word to the personal dictionary -- * or & 
@@ -224,10 +223,10 @@ often erased, this will enable to manage smaller lists of words.
 Installation notes: ~
 
   Files of the plugin: ~
-    The plugin is composed of 6 files plus this file and its HTML version :
+    The plugin is composed of 7 files plus this file and its HTML version :
       - VS-all.vim	: the file to be sourced, it sources the others ;
       - VS_deps.vim	: contains some commands that helps to reduce
-			  dependencies towards other VIM plugins ;
+			  dependencies toward other VIM plugins ;
       - VS_fm-fun.vim	: file management functions ;
       - VS_gui.vim	: functions relatives to the corrector GUI ;
       - VS_int-fun.vim	: internal function wrapping the calls to |IA-spell| ;
@@ -259,7 +258,6 @@ Installation notes: ~
     into your $VIMRUNTIME/macros folder. I also suggest you take a look on a
     my page about "File-type plugin emulation on VIM 5.xx" for more
     explanations.
-      <http://hermitte.free.fr/vim-beta/ftplugin.php3> : still, but will move to
       <http://hermitte.free.fr/vim/ftplugin.php3>
 
   VIM 6.0~
@@ -286,7 +284,7 @@ Installation notes: ~
   Last thing:~
     I'm aware that this plugin is quite complex. It is the price for all its
     features. It depends on external plugins and even external (but common for
-    VIM users I guess) tools. For maintenance aspects, it is composed on
+    VIM users I guess) tools. For maintenance aspects, it is composed of
     several inter-dependant files. And for compatibility reasons, I've chosen
     to use as few new VIM 6.0 features as possible.
 
@@ -319,11 +317,11 @@ troubles when I wanted to |Parse| several buffers.
   Directly passed to |IA-spell| if defined.
 
 *g:VS_aspell_add_directly_to_dict* boolean (0/1)
-  This trick enable to quicken the insertion of words into the personal
+  This trick enables to quicken the insertion of words into the personal
   dictionary. I guess it will only work with |Aspell|. I've tested this
-  approach with Aspell .33.5 alpha ; I can't guarantee that it always work
-  with future versions of Aspell. By default, this option is set to false (ie.
-  0).
+  approach with Aspell .33.5 alpha ; I can't guarantee that it will always
+  work with future versions of Aspell. By default, this option is set to false
+  (ie.  0).
   If you want to use it, please check :
   - You are using Aspell or at least the format of your personal dictionary
     looks like : "xxxx <number_of_entries>" on the first line, while the
@@ -445,15 +443,15 @@ References:~
      trigger -- extension of the VIM toggling feature. 
      This script is facultative. If installed, the language |Swap| ping
      feature will be automatically enabled.
-     <http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim>
+     <http://hermitte.free.fr/vim/general.php3#Triggers_vim>
     
     buffoption.vim					*buffoption*
      This file is used to define buffer relative mappings with versions of VIM
      prior to the 6 series -- critical in that case. As, I write my mappings
      as "noremap"s, you should retrieve my patch from
-     <http://hermitte.free.fr/vim-beta/ftplugin.php3#buffoptions2_vim> (you
+     <http://hermitte.free.fr/vim/ftplugin.php3#buffoptions2_vim> (you
      will also need : buffoptions_map2.vim and fileuptodate.vim. 
-     With the VIM 6 series, this file is no more required.
+     With the VIM 6 series, this file is no longer required.
     
   
   Other related VIM's plugins ~
@@ -477,14 +475,22 @@ References:~
      <http://www.erols.com/astronaut/vim/index.html#Spelling>
 
     Matthias Veit's spellcheck.vim for VIM 6 (only ?)	*spellcheck*
-     Late addition to sourceforge. Require Aspell and ruby => I haven't tested
-     it.  It seems that I permit much more things.
+     Require Aspell and ruby => I haven't tested it.  It seems that I permit
+     much more things.
      <http://vim.sf.net/scripts/script.php?script_id=131>
 
     Johannes Zellner's Aspell.vim for VIM 6.0		*JZ*
      Another spellchecking plugin wrapping Aspell.
-     <htpp://www.zellner.org/vim/autoload/Aspell.vim>
+     <http://www.zellner.org/vim/autoload/Aspell.vim>
 
+    Yegappan Lakshmanan's spell.vim			*YL*
+     Plugin that wraps calls to the UNIX spellchecker : spell. It can also
+     parses selected text, and not only files. But no alternatives proposed.
+     <http://vim.sf.net/scripts/script.php?script_id=232>
+
+    Text Processing With Integrated Spell Checking	
+     Presents different stuffs and another simple way to call Aspell from VIM:
+     <http://www.highley-recommended.com/text-processing.html>
 
 ------------------------------------------------------------------------------
  © Luc Hermitte, 2001-2002 <http://hermitte.free.fr/vim>
