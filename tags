@@ -37,6 +37,7 @@ g:VS_aspell_add_directly_to_dict	VS_help.txt	/*g:VS_aspell_add_directly_to_dict*
 g:VS_language	VS_help.txt	/*g:VS_language*
 g:VS_spell_prog	VS_help.txt	/*g:VS_spell_prog*
 g:VS_strip_accents	VS_help.txt	/*g:VS_strip_accents*
+help-tags	tags	1
 main-buffer-mode	VS_help.txt	/*main-buffer-mode*
 problems	VS_help.txt	/*problems*
 spellcheck	VS_help.txt	/*spellcheck*

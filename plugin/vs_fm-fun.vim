@@ -4,8 +4,8 @@
 " File:		VS_fm-fun.vim
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 " 		<URL:http://hermitte.free.fr/vim>
-" Ver:		0.1d
-" Last Update:	01st feb 2002
+" Ver:		0.2c
+" Last Update:	25th feb 2002
 "
 "===========================================================================
 "
@@ -45,9 +45,7 @@ endfunction
 "===========================================================================
 " 
 function! VS_ExitSpell()
-  if &ft != "vsgui"
-    call VS_g_Open_Corrector()
-  endif
+  if &ft != "vsgui" | call VS_g_Open_Corrector() | endif
   bd!
   " clear the mispelled words
   syn clear
@@ -85,10 +83,16 @@ function! VS_show_errors()
     exe "source ".tmp
     exe "bd! ".tmp
     call delete(tmp)
+    "
+    let ilf = VS_f_ignore_list_file(expand("%:p:h"))
+    if strlen(ilf)!=0 && filereadable(ilf)
+      exe "so ".ilf
+    endif
+
     "syn cluster Spell contains=Misspelling,SpellCorrected
     if &ft == "tex"
-      syn cluster texCommentGroup	add=SpellCorrected,SpellErrors
-      syn cluster texMatchGroup		add=SpellCorrected,SpellErrors
+      syn cluster texCommentGroup	add=SpellErrors,Normal
+      syn cluster texMatchGroup		add=SpellErrors,Normal
     endif
     hi link SpellErrors Error
 endfunction
@@ -100,7 +104,7 @@ endfunction
 " -> <spath>/.spell/errors-list
 " Format: by line : the one produced by : echo 'word' | aspell -a
 
-function! VS_f_error_list_file(path)
+function! VS_f_check_for_VS_path(path)
     let path = fnamemodify(a:path,':p:h')
   let path = fnamemodify(a:path . '/.spell', ':p')
   if !isdirectory(path)
@@ -125,13 +129,23 @@ function! VS_f_error_list_file(path)
       echohl None
     endif
   endif
+endfunction
+
+function! VS_f_error_list_file(path)
+  call VS_f_check_for_VS_path(a:path)
   return a:path . '/.spell/errors-list'
+endfunction
+
+function! VS_f_ignore_list_file(path)
+  call VS_f_check_for_VS_path(a:path)
+  return a:path . '/.spell/ignore-list'
 endfunction
 
 function! VS_f_corrector_file(path)
   let path = fnamemodify(a:path . '/.spell', ':p:h')
   return a:path . '/.spell/spell-corrector'
 endfunction
+
 
 "===========================================================================
 " Check for New Errors
@@ -143,11 +157,8 @@ function! VS_CheckNewErrors(path,errors)
   "    i-  If did not exist => add everything
   "    ii- add what is new
   " 1.1- Determine what the new errors are
-    let new = ""
-    if !filereadable(elf) 
-      let new = a:errors
-    else
-      let new = VS_f_compare(elf,a:errors)
+    if !filereadable(elf) | let new = a:errors
+    else                  | let new = VS_f_compare(elf,a:errors)
     endif
   " 1.2- Build their alternatives
     let tmp = VS_f_build_alternatives(new)
@@ -169,8 +180,7 @@ endfunction
 " Build Alternatives for a list of errors
 
 function! VS_f_build_alternatives(errors)
-  let g:toto = VS_i_get_alternatives(a:errors)
-  return g:toto
+  return VS_i_get_alternatives(a:errors)
 endfunction
 
 "===========================================================================
@@ -196,6 +206,33 @@ function! VS_f_compare(elf,errors)
 endfunction
 "
 "===========================================================================
+" Functions to manage ignored words
+function! VS_f_search(pat)
+  if version < 600
+    let old_ = v:errmsg
+    let v:errmsg=""
+    exe '/\/'.a:pat.'\/$'
+    let r = strlen(v:errmsg) != 0
+    let v:errmsg=old_
+    return r
+  else
+    return search(a:pat) == 0
+  endif
+endfunction
+
+function! VS_f_add_word_to_ignore_file(word)
+    let ilf = VS_f_ignore_list_file(expand("%:p:h"))
+    if strlen(ilf)==0 | return | endif
+
+    " Add the pattern to the "ignore" file
+    exe "split ".ilf
+    if VS_f_search(a:word)
+      $put='syn match Normal /'.a:word.'/'
+    endif
+    w | bd
+endfunction
+
+"===========================================================================
 " Functions stolen in David Campbell's engspchk.vim
 "
   function! VS_SpchkNext()
@@ -213,9 +250,7 @@ endfunction
       if line(".") == lastline
         let prvcol=curcol
         let curcol=col(".")
-        if curcol == prvcol
-          break
-        endif
+        if curcol == prvcol | break | endif
       endif
     endwhile
 
@@ -223,9 +258,7 @@ endfunction
     unlet curcol
     unlet errid
     unlet lastline
-    if exists("prvcol")
-      unlet prvcol
-    endif
+    if exists("prvcol") | unlet prvcol | endif
   endfunction
 
   " -------------------------------------------------------------------
@@ -243,16 +276,12 @@ endfunction
       if line(".") == 1
         let prvcol=curcol
         let curcol=col(".")
-        if curcol == prvcol
-          break
-        endif
+        if curcol == prvcol | break | endif
       endif
     endwhile
 
     " cleanup
     unlet curcol
     unlet errid
-    if exists("prvcol")
-      unlet prvcol
-    endif
+    if exists("prvcol") | unlet prvcol | endif
   endfunction

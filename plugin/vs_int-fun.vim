@@ -4,8 +4,8 @@
 " File:		VS_int-fun.vim
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 " 		<URL:http://hermitte.free.fr/vim>
-" Ver:		0.2
-" Last Update:	27th jan 2002
+" Ver:		0.2c
+" Last Update:	25th feb 2002
 "
 " Inspiration:	VIMspell.vim by Claudio Fleiner <claudio@fleiner.com>
 "
@@ -16,24 +16,17 @@
 " Options
 "
 function! VS_set_if_null(var, value)
-  if (!exists(a:var)) 
-    exe "let ".a:var." = a:value"
-  endif
+  if (!exists(a:var)) | exe "let ".a:var." = a:value" | endif
 endfunction
 
 call VS_set_if_null("g:VS_language", 'francais')
 call VS_set_if_null("g:VS_stripaccents", 0)
 call VS_set_if_null("g:VS_spell_prog", 'aspell')
 call VS_set_if_null("g:VS_aspell_add_directly_to_dict", 0)
-"let g:VS_language='francais'
-"let g:VS_stripaccents=0
-"let g:VS_spell_prog = 'aspell'
 
-:function! CheckSpellLanguage() 
-:  if !exists("b:spell_options") 
-:    let b:spell_options=""
-:  endif
-:endfunction
+function! CheckSpellLanguage() 
+  if !exists("b:spell_options") | let b:spell_options="" | endif
+endfunction
 
 " Function to compute the name of the personal dictionary for ASPELL
 " You may have to customize it to your own needs.
@@ -49,12 +42,9 @@ endfunction
 "===========================================================================
 " Programs calls
 function! VS_i_Call_Spell_type(type,...)
-  if a:type == "tex"
-    let mode = ' --mode='. a:type 
-  elseif a:type =~'htm\|xml\|php\|incl'
-    let mode = ' --mode=sgml'
-  else
-    let mode = ''
+  if a:type == "tex"                    | let mode = ' --mode='. a:type 
+  elseif a:type =~'htm\|xml\|php\|incl' | let mode = ' --mode=sgml'
+  else                                  | let mode = ''
   endif
 
   let ret = g:VS_spell_prog . ' -d ' . g:VS_language . mode . ' '
@@ -96,9 +86,7 @@ function! VS_i_get_alternatives(errors)
 "   endif
   let tmp = tempname()
   let cmd = 'r!cat ' . tmp . ' | ' . VS_i_Call_Spell(' -a')
-  if exists("g:VS_stripaccents") && g:VS_stripaccents == 1
-    let cmd = cmd . " --strip-accents "
-  endif
+  if g:VS_stripaccents == 1 | let cmd = cmd . " --strip-accents " | endif
   
   exe "split "  . tmp
   0put = a:errors
@@ -139,13 +127,11 @@ function! VS_i_aspell_directly_to_dict(word,lowcase)
   " 2.a/ Open the ASPELL local-dictionary
   exe 'split '.VS_personal_dict() 
   " 2.b/ Increment the number of word
-  exe "normal $\<c-a>"
+  exe "normal! $\<c-a>"
   " 2.c/ Add the word to the last line
   $put=a:word
   " 2.d/ chage it to lower case if required
-  if a:lowcase == 1
-    normal guu
-  endif
+  if a:lowcase == 1 | normal guu | endif
   " 2.e/ save and close
   w | bd
 endfunction
@@ -170,8 +156,7 @@ function! VS_i_add_word_to_dict(word,lowcase)
     return
   else
     " Classical method
-    if a:lowcase == 1 | let cmd = "&" | else | let cmd = "*" 
-    endif
+    if a:lowcase == 1 | let cmd = "&" | else | let cmd = "*" | endif
     let cmd = cmd . a:word 
     " Save the dictionary
     let cmd = cmd . "\n#"
@@ -183,3 +168,4 @@ function! VS_i_add_word_to_dict(word,lowcase)
     call delete(tmp)
   endif
 endfunction
+

@@ -4,8 +4,8 @@
 " File:		VS_gui.vim	
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 " 		<URL:http://hermitte.free.fr/vim>
-" Ver:		0.2
-" Last Update:	27th jan 2002
+" Ver:		0.2c
+" Last Update:	25th feb 2002
 "
 " Note:
 " (*) Whenever it is possible, add the single-quote to the keyword thanks
@@ -79,7 +79,7 @@ function! VS_g_Make(word)
     exe ':r '.elf
     :2
     normal "zyy
-    exe 'v/'.a:word.'\s\+/d'
+    exe 'v/& '.a:word.'\s\+/d'
     normal "zP
     if line('$') == 1
       echohl WarningMsg
@@ -351,6 +351,7 @@ function! VS_g_IgnoreWord()
   let word = b:word
   call FindOrCreateBuffer(b:mainfile,1)
   exe 'syn match Normal /'.word.'/'
+  call VS_f_add_word_to_ignore_file(word)
   call FindOrCreateBuffer(this,1)
 endfunction
 

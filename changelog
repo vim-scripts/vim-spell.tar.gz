@@ -1,5 +1,21 @@
 ChangeLog File for Vim-Spell
----------------------------
+----------------------------
+
+Ver 0.2c: 25th feb 2002 
+* Still some dependencies reduced :
+  - a.vim is added to the archive. The version is an old one that works with
+    VIM 5.7, and the functions defined are not encapsulated (hidden), contrary
+    to the latest version.
+* Ignore feature improved    
+  - The un-highlighting of ignored words has been fixed.
+  - Ignored words are stored in a file in the ./.spell folder. Hence, they are
+    still ignored when new words are added to the dictionary or when I/Aspell
+    is re-runned.
+* Bug fix 
+  - Oddities should not show up anymore when proposing alternatives for a
+    string present in several already noticed misspellings.
+* Help file updated
+  - One TODO item done : list of ignored words implemented.
 
 Ver 0.2b: 30th Jan 2002 
 * Some dependencies removed:
@@ -12,7 +28,7 @@ Ver 0.2b: 30th Jan 2002
   - dependencies towards a.vim and cat will remains.
 * The help message for the Corrector buffer exists can be hidden
 
-Ver O.2: 27th Jan 2002 
+Ver 0.2: 27th Jan 2002 
 * Slowly converted to version 6.0 of VIM :
   - The use of buffoption 2 is no more required with VIM 6.
     With VIM 5.xx, there is no way around.

@@ -1,8 +1,8 @@
 # VIM: let g:VS_language = 'american' 
-*VS_help.txt*	For Vim version 5.7.+	Last change: 30th Jan 2002 
+*VS_help.txt*	For Vim version 5.7.+	Last change: 25th feb 2002
 
 		VIM Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2b
+			VIM-Spell version 0.2c
 
 
 ------------------------------------------------------------------------------
@@ -148,8 +148,9 @@ Details about the features:~
 *Ignore*	Ignore the fact that the word is misspelled -- i
   Corrector mode :: dictionary management
 
-  This is a temporary measure. The word is once again highlighted when
-  |Highlight| is required.
+  The word is added to the file ./.spell/ignore-list. If you want to change
+  some of the words, edit the file and remove the words you don't want to be
+  ignore anymore.
 
 
 *Add*		Add the word to the personal dictionary -- * or & 
@@ -244,8 +245,8 @@ Installation notes: ~
     respective ftplugins.
     If you want to proceed otherwise, look at the comments whitin VS-all.vim.
 
-    Note by the way that you will also require the |alternate| plugin.
-    It is in $VIM/macros/ on my systems.
+    Note by the way that you will also require the |alternate| plugin. You
+    will find an old version joined in this archive.
 
   VIM 5.xx~
     The VIM version I use is the 5.7. Hence all the features from this plugin
@@ -347,9 +348,6 @@ Known problems & TODO List: ~
     be observed with the affectation of &filetype within modelines like with
     this file.  
 
-    The current |Ignore| feature lasts until the next call to VS_show_errors()
-    hence until a |Highlight| of misspellings, a |Parse|, etc.
-
     When we hit '*' in the Corrector mode, a space must be hit in order to
     activate the associated mapping.
 
@@ -367,8 +365,6 @@ Known problems & TODO List: ~
     * Ignore some contextual word like "\oe uvre" -- with TeX
       and other expressions like for instance the labels of figure the
       parameters to \rnode{}{}{}, and so on.
-    * Locally and permanently Ignore words ; e.g. Luc & Hermitte can be
-      ignored safely in a document, but are not wanted in the dictionary.
     * Cache the dictionary management requests ; delay and merge the calls to
       |IA-spell| that add words to the dictionary as long as possible.
     * Secondary dictionary.
@@ -440,7 +436,8 @@ References:~
     
     a.vim						*alternate*
      Defines some functions to go to specific windows/buffers.
-     Critical.
+     Critical. As this plugin has changed since its first version, I join an
+     usable (with VIM-Spell) version of a.vim in the archive.
      <http://vim.sf.net/scripts/script.php?script_id=31>
     
     Triggers.vim					*triggering*
