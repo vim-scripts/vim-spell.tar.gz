@@ -1,27 +1,38 @@
 ChangeLog File for Vim-Spell
 ---------------------------
 
-Ver O.2: 27th jan 2002 
-* Slowly converted to verion 6.0 of VIM :
+Ver 0.2b: 30th Jan 2002 
+* Some dependencies removed:
+  - help.vim is no longer required
+  - Triggers.vim becomes facultative ; as this plugin is also boring to
+    install (because it requires other plugins, etc), it is now possible to
+    use Vim-Spell without Triggers.vim. As a consequence, the swapping
+    language feature will be disabled. The detection of Triggers.vim is
+    completly transparent.
+  - dependencies towards a.vim and cat will remains.
+* The help message for the Corrector buffer exists can be hidden
+
+Ver O.2: 27th Jan 2002 
+* Slowly converted to version 6.0 of VIM :
   - The use of buffoption 2 is no more required with VIM 6.
     With VIM 5.xx, there is no way around.
-    Unfortunately, using VIM 6.0 does not permit to have bufferized menus --
+    Unfortunately, using VIM 6.0 does not permit to have buffered menus --
     ie. menus associated to a buffer.
   - The mappings are all silent under VIM 6.0
   - In order to let this plugin usable from VIM 5.x and VIM 6, none of the
-    other improvments from the 6th version will be used (s:, <Plug>, <unique>,
+    other improvements from the 6th version will be used (s:, <Plug>, <unique>,
     <SID>, etc.)
   -> <VS_*map*.vim>
 * First fix to the insertion of accentuated words
-  As I didn't succeded to add accentuated words to the personal dictionary
-  with aspell (compiled with MinGW, under Windows); I added the possiblity to
+  As I didn't succeeded to add accentuated words to the personal dictionary
+  with Aspell (compiled with MinGW, under Windows); I added the possibility to
   directly add words within the personal dictionary.
   -> <VS_int-fun.vim>
 * In the continuation of the previous fix, there a new option :
   «g:VS_aspell_add_directly_to_dict» that enable to directly modify the
-  personal dictionary without using aspell. This option is to be used with
-  care, I can't guaranty aspell will always use the same format for pers.
-  dict.  neither it works with ispell. This way of proceding is much more
+  personal dictionary without using Aspell. This option is to be used with
+  care, I can't guaranty Aspell will always use the same format for pers.
+  dict.  neither it works with ispell. This way of proceeding is much more
   quicker than using the pipe protocol.
   -> <VS_int-fun.vim>
 * Correct the replacement of word :
@@ -40,10 +51,10 @@ Ver 0.1e:
     perturb anymore.
   Remark: The correction has been stolen from Dr. Charles E. Campbell, Jr.'s
   engspchk.vim plugin. It could/should be extended to other filetypes you may
-  want to correct (html, c++, mail, etc.)
+  want to correct (HTML, c++, mail, etc.)
   -> <VS_fm-fun.vim>
 
-Ver 0.1d: 13th nov 2001
+Ver 0.1d: 13th Nov 2001
 * Change the jumping functions (VS_SpchkPrev & VS_SpchkNext) to ignore
   errors that does not correspond to misspellings.
 
@@ -60,8 +71,8 @@ Ver 0.1c:
   But it is still not perfect :-((
   "{MiZspell}" will signal the closing curly-bracket to be a TeXError
     
-Ver 0.1b: 7th nov 2001
-* Add "SGML"-like support: xml, html, php, incl (personal extension I use)
+Ver 0.1b: 7th Nov 2001
+* Add "SGML"-like support: XML, HTML, php, incl (personal extension I use)
   -> <VS_int-fun.vim>
 
 Ver 0.1:

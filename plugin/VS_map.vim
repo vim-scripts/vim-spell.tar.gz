@@ -1,3 +1,14 @@
+" -*- VIM -*-
+" Defines the mappings and menus for the corrected/checked buffer.
+"
+" File:		VS_gui-map.vim
+" Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
+" 		<URL:http://hermitte.free.fr/vim>
+" Ver:		0.2b
+" Last Update:	30th jan 2002
+"
+"===========================================================================
+"
 
 "===========================================================================
 " Macros
@@ -13,9 +24,10 @@
   noremap ¡VS_addW!	:call VS_add_word()<cr>
   noremap ¡VS_ignW!	:call VS_ignore_word()<cr>
 
-  noremap ¡VS_swapL!	:call Trigger_DoSwitch('¡VS_swapL!', 
+  IfTriggers
+	\ noremap ¡VS_swapL!	:call Trigger_DoSwitch('¡VS_swapL!', 
 			\ 'let g:VS_language="american"', 
-			\ 'let g:VS_language="francais"')<cr>
+			\ 'let g:VS_language="francais"', 1, 1)<cr>
   noremap ¡VS_exit!	:let @_=VS_ExitSpell()<CR>
 
 
@@ -24,7 +36,7 @@ if version < 600
   function! VS_Maps_4_file_edited()
     map <F4>	¡VS_check!
     map <S-F4>	¡VS_alt!
-    map <C-F4>	¡VS_swapL!
+    IfTriggers map <C-F4>	¡VS_swapL!
     " map <m-F6>	¡VS_exit!
     " map <ESC><F4>	¡VS_exit!
     map g=	¡VS_exit!
@@ -32,7 +44,7 @@ if version < 600
     map <M-s>r	¡VS_check!
     map <M-s>s	¡VS_showE!
     map <M-s>a	¡VS_alt!
-    map <M-s>L	¡VS_swapL!
+    IfTriggers map <M-s>L	¡VS_swapL!
     map <M-s>E	¡VS_exit!
 
     map <M-n>	¡VS_nextE!
@@ -46,7 +58,8 @@ if version < 600
     nmenu 55.100 Spell\ &check.Show\ &alternatives<tab><M-s>a	¡VS_alt!
     nmenu 55.100 Spell\ &check.E&xit<tab><M-s>E			¡VS_exit!
     amenu 55.100 Spell\ &check.-----------------		<c-l>
-    nmenu 55.101 Spell\ &check.S&wap\ Language<tab><M-s>L	¡VS_swapL!
+    IfTriggers
+	  \nmenu 55.101 Spell\ &check.S&wap\ Language<tab><M-s>L ¡VS_swapL!
     amenu 55.510 Spell\ &check.------------			<c-l>
     nmenu 55.510  Spell\ &check.&Next\ mispelling<tab><M-s>n	<M-s>n
     nmenu 55.510  Spell\ &check.&Prev\ mispelling<tab><M-s>p	<M-s>p
@@ -56,7 +69,7 @@ else
   function! VS_Maps_4_file_edited()
     map <buffer> <F4>		:silent normal ¡VS_check!<cr>
     map <buffer> <S-F4>		:silent normal ¡VS_alt!<cr>
-    map <buffer> <C-F4>		:silent normal ¡VS_swapL!<cr>
+    IfTriggers map <buffer> <C-F4>		¡VS_swapL!
     " map <buffer> <m-F6>	:silent normal ¡VS_exit!<cr>
     " map <buffer> <ESC><F4>	:silent normal ¡VS_exit!<cr>
     map <buffer> g=		:silent normal ¡VS_exit!<cr>
@@ -64,7 +77,7 @@ else
     map <buffer> <M-s>r		:silent normal ¡VS_check!<cr>
     map <buffer> <M-s>s		:silent normal ¡VS_showE!<cr>
     map <buffer> <M-s>a		:silent normal ¡VS_alt!<cr>
-    map <buffer> <M-s>L		:silent normal ¡VS_swapL!<cr>
+    IfTriggers map <buffer> <M-s>L		¡VS_swapL!
     map <buffer> <M-s>E		:silent normal ¡VS_exit!<cr>
 
     map <buffer> <M-n>		:silent normal ¡VS_nextE!<cr>
@@ -78,7 +91,8 @@ else
     nmenu 55.100 Spell\ &check.Show\ &alternatives<tab><M-s>a	¡VS_alt!
     nmenu 55.100 Spell\ &check.E&xit<tab><M-s>E			¡VS_exit!
     amenu 55.100 Spell\ &check.-----------------		<c-l>
-    nmenu 55.101 Spell\ &check.S&wap\ Language<tab><M-s>L	¡VS_swapL!
+    IfTriggers 
+	  \ nmenu 55.101 Spell\ &check.S&wap\ Language<tab><M-s>L ¡VS_swapL!
     amenu 55.510 Spell\ &check.------------			<c-l>
     nmenu 55.510  Spell\ &check.&Next\ mispelling<tab><M-s>n	<M-s>n
     nmenu 55.510  Spell\ &check.&Prev\ mispelling<tab><M-s>p	<M-s>p

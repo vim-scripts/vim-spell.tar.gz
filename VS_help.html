@@ -7,10 +7,10 @@
 <PRE>
 # <A HREF="#VIM">VIM</A>: let <A HREF="#g:VS_language">g:VS_language</A> = 'american' 
 
-*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 27th jan 2002
+*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 30th Jan 2002 
 
 		<A HREF="#VIM">VIM</A> Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2
+			VIM-Spell version 0.2b
 
 
 ------------------------------------------------------------------------------
@@ -69,7 +69,8 @@ instance :
       &#42; |<A HREF="#Ignore">Ignore</A>| the fact that the word is misspelled,
       &#42; |<A HREF="#Add">Add</A>| the word to the personal dictionary,
       &#42; |<A HREF="#Undo/redo">Undo/redo</A>| the last action,
-      &#42; |<A HREF="#Jump">Jump</A>| from one misspellings to the next/previous.
+      &#42; |<A HREF="#Jump">Jump</A>| from one misspellings to the next/previous,
+      &#42; |<A HREF="#Hide_Help">Hide_Help</A>| message for the Corrector mode, or display it.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 <B><FONT COLOR="PURPLE">Details about the features:</FONT></B>
@@ -115,8 +116,8 @@ instance :
 
   Changes the value of the option |<A HREF="#g:VS_language">g:VS_language</A>| in order to be turn after
   turn : &quot;American&quot; or &quot;French&quot;. You will certainly want to change this, do it
-  within VS_map.vim. BTW, this mapping requires you have installed my
-  |<A HREF="#triggering">triggering</A>| plugin.
+  within VS_map.vim. BTW, this feature requires you have installed my
+  |<A HREF="#triggering">triggering</A>| plugin, otherwise it won't be enabled.
 
 
 *<A NAME="Alternatives"></A><B>Alternatives</B>*  Ask for alternatives -- &lt;M-s&gt;a
@@ -206,6 +207,14 @@ instance :
   <A HREF="#Undo/redo">Undo/redo</A> the last action that has occurred in the main buffer. This is
   helpful to undo a change without (because we haven't click on the right line
   for instance) leaving the corrector window.
+  
+
+
+*<A NAME="Hide_Help"></A><B>Hide_Help</B>*	Hide/Display help -- h / &lt;C-R&gt;
+  Corrector mode :: 
+
+  Display or hide a several lines help message that sums up the different
+  key-bindings used whitin the Corrector Mode.
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -244,6 +253,8 @@ often erased, this will enable to manage smaller lists of words.
 <B><FONT COLOR="PURPLE">  Files of the plugin: </FONT></B>
     The plugin is composed of 6 files plus this file and its HTML version :
       - VS-all.vim	: the file to be sourced, it sources the others ;
+      - VS_deps.vim	: contains some commands that helps to reduce
+			  dependencies towards other <A HREF="#VIM">VIM</A> plugins ;
       - VS_fm-fun.vim	: file management functions ;
       - VS_gui.vim	: functions relatives to the corrector GUI ;
       - VS_int-fun.vim	: internal function wrapping the calls to |<A HREF="#IA-spell">IA-spell</A>| ;
@@ -259,10 +270,10 @@ often erased, this will enable to manage smaller lists of words.
     I choose not to put it in my plugins folder, and source VS-all.vim only
     with specific filetypes (like tex and html,php,...) thanks to their
     respective ftplugins.
+    If you want to proceed otherwise, look at the comments whitin VS-all.vim.
 
-    Note by the way that you will also require the |<A HREF="#alternate">alternate</A>| plugin and my
-    |<A HREF="#help">help</A>| plugin in order to use VIM-Spell. They are in $VIM/plugin/ on my
-    systems.
+    Note by the way that you will also require the |<A HREF="#alternate">alternate</A>| plugin.
+    It is in $VIM/macros/ on my systems.
 
 <B><FONT COLOR="PURPLE">  VIM 5.xx</FONT></B>
     The <A HREF="#VIM">VIM</A> version I use is the 5.7. Hence all the features from this plugin
@@ -281,8 +292,8 @@ often erased, this will enable to manage smaller lists of words.
 <B><FONT COLOR="PURPLE">  VIM 6.0</FONT></B>
     As I have just said, the &quot;maps local to a buffer&quot; mechanism is required by
     VIM-Spell to work correctly. It is directly supported under <A HREF="#VIM">VIM</A> 6.0,
-    without any other plugin required. Hence, as |<A HREF="#buffoption">buffoption</A>| is not used,
-    menus are no longer local to buffers.
+    without any other plugin required. However, as |<A HREF="#buffoption">buffoption</A>| is not used,
+    menus can no longer be local to buffers.
 
 
 <B><FONT COLOR="PURPLE">  Customizing the mappings:</FONT></B>
@@ -402,7 +413,6 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
       through a piped call, while it is quite easy to perform. But is it safe
       in regard of its future versions ? Will be supported if the option
       |<A HREF="#g:VS_aspell_add_directly_to_dict">g:VS_aspell_add_directly_to_dict</A>| is set to true.
-    &#42; <A HREF="#Add">Add</A> the possibility to retract/expand the help for the Corrector-Mode.
     &#42; Dedicate a sub-menu for the different options.
 
     &#42; Extension to other file types : extend the file-type2mode recognition
@@ -465,7 +475,7 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
     Text tools						*<A NAME="cat"></A><B>cat</B>* *<A NAME="echo"></A><B>echo</B>*
      The text tools and more precisely <A HREF="#cat">cat</A> is required on your system. Make
      sure it is accessible from your ${PATH}.
-     Rem.: I use |<A HREF="#cat">cat</A>| instead of |<A HREF="#echo">echo</A>| because |<A HREF="#echo">echo</A>| looses accents and
+     Rem.: I use &quot;<A HREF="#cat">cat</A>&quot; instead of &quot;<A HREF="#echo">echo</A>&quot; because &quot;<A HREF="#echo">echo</A>&quot; looses accents and
      cuts word when they occur on my Windows NT system.
     
 <B><FONT COLOR="PURPLE">  Dependencies </FONT></B>
@@ -478,16 +488,11 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
 	<A HREF="http://vim.sf.net/scripts/script.php?script_id=31">http://vim.sf.net/scripts/script.php?script_id=31</A>
     
 
-    help.vim						*<A NAME="help"></A><B>help</B>*
-     Very little plugin of my own that I use to define help strings.
-     Not rely critical.
-	<A HREF="http://hermitte.free.fr/vim/ressources/help.vim">http://hermitte.free.fr/vim/ressources/help.vim</A>
-
-
     Triggers.vim					*<A NAME="triggering"></A><B>triggering</B>*
      Big piece of script. It permits to execute one action or an other on a
-     trigger. 
-     Used to swap languages.
+     trigger -- extension of the <A HREF="#VIM">VIM</A> toggling feature. 
+     This script is facultative. If installed, the language |<A HREF="#Swap">Swap</A>| ping
+     feature will be automatically enabled.
 	<A HREF="http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim">http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim</A>
     
 

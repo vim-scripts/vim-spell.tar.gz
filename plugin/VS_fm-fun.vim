@@ -5,7 +5,7 @@
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 " 		<URL:http://hermitte.free.fr/vim>
 " Ver:		0.1d
-" Last Update:	08th nov 2001
+" Last Update:	01st feb 2002
 "
 "===========================================================================
 "
@@ -196,7 +196,7 @@ function! VS_f_compare(elf,errors)
 endfunction
 "
 "===========================================================================
-" Functions stolen in DavidCampbell's engspchk.vim
+" Functions stolen in David Campbell's engspchk.vim
 "
   function! VS_SpchkNext()
     ""let errid   = synIDtrans(hlID("Error"))

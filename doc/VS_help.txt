@@ -1,8 +1,8 @@
 # VIM: let g:VS_language = 'american' 
-*VS_help.txt*	For Vim version 5.7.+	Last change: 27th jan 2002
+*VS_help.txt*	For Vim version 5.7.+	Last change: 30th Jan 2002 
 
 		VIM Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2
+			VIM-Spell version 0.2b
 
 
 ------------------------------------------------------------------------------
@@ -57,7 +57,8 @@ instance :
       * |Ignore| the fact that the word is misspelled,
       * |Add| the word to the personal dictionary,
       * |Undo/redo| the last action,
-      * |Jump| from one misspellings to the next/previous.
+      * |Jump| from one misspellings to the next/previous,
+      * |Hide_Help| message for the Corrector mode, or display it.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 Details about the features:~
@@ -98,8 +99,8 @@ Details about the features:~
 
   Changes the value of the option |g:VS_language| in order to be turn after
   turn : "American" or "French". You will certainly want to change this, do it
-  within VS_map.vim. BTW, this mapping requires you have installed my
-  |triggering| plugin.
+  within VS_map.vim. BTW, this feature requires you have installed my
+  |triggering| plugin, otherwise it won't be enabled.
 
 *Alternatives*  Ask for alternatives -- <M-s>a
   Main mode.
@@ -181,6 +182,13 @@ Details about the features:~
   Undo/redo the last action that has occurred in the main buffer. This is
   helpful to undo a change without (because we haven't click on the right line
   for instance) leaving the corrector window.
+  
+
+*Hide_Help*	Hide/Display help -- h / <C-R>
+  Corrector mode :: 
+
+  Display or hide a several lines help message that sums up the different
+  key-bindings used whitin the Corrector Mode.
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -217,6 +225,8 @@ Installation notes: ~
   Files of the plugin: ~
     The plugin is composed of 6 files plus this file and its HTML version :
       - VS-all.vim	: the file to be sourced, it sources the others ;
+      - VS_deps.vim	: contains some commands that helps to reduce
+			  dependencies towards other VIM plugins ;
       - VS_fm-fun.vim	: file management functions ;
       - VS_gui.vim	: functions relatives to the corrector GUI ;
       - VS_int-fun.vim	: internal function wrapping the calls to |IA-spell| ;
@@ -232,10 +242,10 @@ Installation notes: ~
     I choose not to put it in my plugins folder, and source VS-all.vim only
     with specific filetypes (like tex and html,php,...) thanks to their
     respective ftplugins.
+    If you want to proceed otherwise, look at the comments whitin VS-all.vim.
 
-    Note by the way that you will also require the |alternate| plugin and my
-    |help| plugin in order to use VIM-Spell. They are in $VIM/plugin/ on my
-    systems.
+    Note by the way that you will also require the |alternate| plugin.
+    It is in $VIM/macros/ on my systems.
 
   VIM 5.xx~
     The VIM version I use is the 5.7. Hence all the features from this plugin
@@ -254,8 +264,8 @@ Installation notes: ~
   VIM 6.0~
     As I have just said, the "maps local to a buffer" mechanism is required by
     VIM-Spell to work correctly. It is directly supported under VIM 6.0,
-    without any other plugin required. Hence, as |buffoption| is not used,
-    menus are no longer local to buffers.
+    without any other plugin required. However, as |buffoption| is not used,
+    menus can no longer be local to buffers.
 
 
   Customizing the mappings:~
@@ -366,7 +376,6 @@ Known problems & TODO List: ~
       through a piped call, while it is quite easy to perform. But is it safe
       in regard of its future versions ? Will be supported if the option
       |g:VS_aspell_add_directly_to_dict| is set to true.
-    * Add the possibility to retract/expand the help for the Corrector-Mode.
     * Dedicate a sub-menu for the different options.
 
     * Extension to other file types : extend the file-type2mode recognition
@@ -423,7 +432,7 @@ References:~
     Text tools						*cat* *echo*
      The text tools and more precisely cat is required on your system. Make
      sure it is accessible from your ${PATH}.
-     Rem.: I use |cat| instead of |echo| because |echo| looses accents and
+     Rem.: I use "cat" instead of "echo" because "echo" looses accents and
      cuts word when they occur on my Windows NT system.
     
   Dependencies ~
@@ -434,15 +443,11 @@ References:~
      Critical.
      <http://vim.sf.net/scripts/script.php?script_id=31>
     
-    help.vim						*help*
-     Very little plugin of my own that I use to define help strings.
-     Not rely critical.
-     <http://hermitte.free.fr/vim/ressources/help.vim>
-
     Triggers.vim					*triggering*
      Big piece of script. It permits to execute one action or an other on a
-     trigger. 
-     Used to swap languages.
+     trigger -- extension of the VIM toggling feature. 
+     This script is facultative. If installed, the language |Swap| ping
+     feature will be automatically enabled.
      <http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim>
     
     buffoption.vim					*buffoption*

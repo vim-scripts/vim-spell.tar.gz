@@ -6,6 +6,7 @@ Correct	VS_help.txt	/*Correct*
 Exit	VS_help.txt	/*Exit*
 Features	VS_help.txt	/*Features*
 Future	VS_help.txt	/*Future*
+Hide_Help	VS_help.txt	/*Hide_Help*
 Highlight	VS_help.txt	/*Highlight*
 IA-spell	VS_help.txt	/*IA-spell*
 Ignore	VS_help.txt	/*Ignore*
@@ -36,8 +37,6 @@ g:VS_aspell_add_directly_to_dict	VS_help.txt	/*g:VS_aspell_add_directly_to_dict*
 g:VS_language	VS_help.txt	/*g:VS_language*
 g:VS_spell_prog	VS_help.txt	/*g:VS_spell_prog*
 g:VS_strip_accents	VS_help.txt	/*g:VS_strip_accents*
-help	VS_help.txt	/*help*
-help-tags	tags	1
 main-buffer-mode	VS_help.txt	/*main-buffer-mode*
 problems	VS_help.txt	/*problems*
 spellcheck	VS_help.txt	/*spellcheck*

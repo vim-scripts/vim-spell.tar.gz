@@ -1,3 +1,14 @@
+" -*- VIM -*-
+" Defines the mappings and menus for the Corrector buffer.
+"
+" File:		VS_gui-map.vim
+" Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
+" 		<URL:http://hermitte.free.fr/vim>
+" Ver:		0.2b
+" Last Update:	30th jan 2002
+"
+"===========================================================================
+"
 
 "===========================================================================
 " Macros
@@ -6,31 +17,57 @@
 " Planned to be used through buffoptions2.vim ; *MUST* be in unix
 " fileformat on order to correctly be prossessed by buffoptions2.vim
 "
-  call ClearHelp("vsgui")
-  call BuildHelp("vsgui", "@| <cr>, <double-click> : Replace with current word")
-  call BuildHelp("vsgui", "@| <A>                  : Replace every occurrence of the misspelled word ")
-  call BuildHelp("vsgui", "@|                        within the current buffer")
-  call BuildHelp("vsgui", "@| <B>                  : Replace every occurrence of the misspelled word ")
-  call BuildHelp("vsgui", "@|                        within all buffers")
-  call BuildHelp("vsgui", "@| <esc>                : Abort")
-  call BuildHelp("vsgui", "@| *, &                 : Add word to the dictionary (may be in lower case)")
-  call BuildHelp("vsgui", "@| <i>                  : Ignore the word momentarily")
-  call BuildHelp("vsgui", "@| <cursors>, <tab>     : Move between entries")
-  call BuildHelp("vsgui", "@|")
-  call BuildHelp("vsgui", "@| <u>/<C-R>            : Undo/Redo last change")
-  call BuildHelp("vsgui", "@| <M-n>, <M-p>         : Move between misspelled entries of the current buffer")
-  call BuildHelp("vsgui", "@+-----------------------------------------------------------------------")
+function! VS_add2help(msg, help_var)
+  if (!exists(a:help_var))
+    exe 'let ' . a:help_var . '   = a:msg'
+    exe 'let ' . a:help_var . 'NB = 0'
+  else
+    exe 'let ' . a:help_var . ' = ' . a:help_var . '."\n" . a:msg'
+  endif
+  ""let g:vsgui_help_maxNB = g:vsgui_help_maxNB+1
+  exe 'let ' . a:help_var . 'NB = ' . a:help_var . 'NB + 1 '
+endfunction
+
+if !exists(":VSAHM")
+  command! -nargs=1 VSAHM call VS_add2help(<args>,"g:vsgui_help")
+  VSAHM  "@| <cr>, <double-click> : Replace with current word"
+  VSAHM  "@| <A>                  : Replace every occurrence of the misspelled word "
+  VSAHM  "@|                        within the current buffer"
+  VSAHM  "@| <B>                  : Replace every occurrence of the misspelled word "
+  VSAHM  "@|                        within all buffers"
+  VSAHM  "@| <esc>                : Abort"
+  VSAHM  "@| *, &                 : Add word to the dictionary (may be in lower case)"
+  VSAHM  "@| <i>                  : Ignore the word momentarily"
+  VSAHM  "@| <cursors>, <tab>     : Move between entries"
+  VSAHM  "@|"
+  VSAHM  "@| <u>/<C-R>            : Undo/Redo last change"
+  VSAHM  "@| <M-n>, <M-p>         : Move between misspelled entries of the current buffer"
+  VSAHM  "@| h                    : Don't display this help"
+  VSAHM  "@+-----------------------------------------------------------------------------"
+
+  command! -nargs=1 VSAHM call VS_add2help(<args>,"g:vsgui_short_help")
+  VSAHM  "@| h                    : Display the help"
+  VSAHM  "@+-----------------------------------------------------------------------------"
+endif
 
 function! VS_g_help()
-  return g:vsgui_help
+  if g:VS_display_long_help	| return g:vsgui_help
+  else				| return g:vsgui_short_help
+  endif
 endfunction
 
 function! VS_g_help_NbL()
   " return 1 + nb lignes of BuildHelp
-  return 14
+  if g:VS_display_long_help	| return 1 + g:vsgui_helpNB
+  else				| return 1 + g:vsgui_short_helpNB
+  endif
 endfunction
 
-
+let g:VS_display_long_help = 0
+function! VS_toggle_gui_help()
+  let g:VS_display_long_help = 1 - g:VS_display_long_help
+  Silent call VS_g_Make(b:word)
+endfunction
 
 " ======================================================================
 if version < 600
@@ -123,6 +160,7 @@ else
     noremap <buffer> u			:silent :call VS_g_UndoCorrection(1)<cr>
     noremap <buffer> <c-r>		:silent :call VS_g_UndoCorrection(0)<cr>
         map <buffer> <M-s>E		:silent normal ¡VS_exit!<cr>
+    silent noremap <buffer> h		:call VS_toggle_gui_help()<cr>
 
     amenu 55.200 Spell\ &check.---------------			<c-l>
     nmenu 55.200 Spell\ &check.Add\ to\ &dictionary<tab>*	*
