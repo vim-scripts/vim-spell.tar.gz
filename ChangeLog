@@ -1,6 +1,12 @@
 ChangeLog File for Vim-Spell
 ----------------------------
 
+Var 0.3c: 22nd jul 2002 
+* The mappins are correctly set when editing several files with for instance
+  > vim *.tex
+* Fix a bug into VS_..add_word_directly_to_dict()
+
+
 Ver 0.3b: 18th jul 2002
 * When there is no misspelling, there is no more error message displayed
 * The syntax highlighting rules for HTML files have been enhanced 

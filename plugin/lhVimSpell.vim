@@ -2,9 +2,9 @@
 " File:		lhVimSpell.vim {{{
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 "		<URL:http://hermitte.free.fr/vim>
-" Version:	0.3b
+" Version:	0.3c
 " Created:	One day in 2001
-" Last Update:	18th jul 2002
+" Last Update:	22nd jul 2002
 " }}}
 "------------------------------------------------------------------------
 " Description:	Spellcheck plugin for VIM. {{{
@@ -169,7 +169,7 @@ endif
 " Part:		lhVimSpell/dependencies }}}
 "=============================================================================
 " Part:		lhVimSpell/corrected buffer functions {{{
-" Last Update:	03rd jul 2002
+" Last Update:	22nd jul 2002
 "------------------------------------------------------------------------
 " Description:	Defines the mappings and menus for the corrected/checked
 " buffer.
@@ -233,29 +233,33 @@ if version < 600
 else
 " ------------------------------------------------------------------------
   function! VS_Maps_4_file_edited() " {{{
-    map <buffer> <F4>		:silent normal ¡VS_check!<cr>
-    map <buffer> <S-F4>		:silent normal ¡VS_alt!<cr>
-    IfTriggers map <buffer> <C-F4>		¡VS_swapL!
-    " map <buffer> <m-F6>	:silent normal ¡VS_exit!<cr>
-    " map <buffer> <ESC><F4>	:silent normal ¡VS_exit!<cr>
-    map <buffer> g=		:silent normal ¡VS_exit!<cr>
+    nmap <buffer> <F4>			:silent normal ¡VS_check!<cr>
+    nmap <buffer> <S-F4>		:silent normal ¡VS_alt!<cr>
+    IfTriggers nmap <buffer> <C-F4>	¡VS_swapL!
+    " map <buffer> <m-F6>		:silent normal ¡VS_exit!<cr>
+    " map <buffer> <ESC><F4>		:silent normal ¡VS_exit!<cr>
+    nmap <buffer> g=			:silent normal ¡VS_exit!<cr>
 
-    map <buffer> <M-s>r		:silent normal ¡VS_check!<cr>
-    map <buffer> <M-s>s		:silent normal ¡VS_showE!<cr>
-    map <buffer> <M-s>a		:silent normal ¡VS_alt!<cr>
-    IfTriggers map <buffer> <M-s>L		¡VS_swapL!
-    map <buffer> <M-s>E		:silent normal ¡VS_exit!<cr>
+    nmap <buffer> <M-s>r		:silent normal ¡VS_check!<cr>
+    nmap <buffer> <M-s>s		:silent normal ¡VS_showE!<cr>
+    nmap <buffer> <M-s>a		:silent normal ¡VS_alt!<cr>
+    IfTriggers nmap <buffer> <M-s>L	¡VS_swapL!
+    nmap <buffer> <M-s>E		:silent normal ¡VS_exit!<cr>
 
-    map <buffer> <M-n>		:silent normal ¡VS_nextE!<cr>
-    map <buffer> <M-p>		:silent normal ¡VS_prevE!<cr>
-    map <buffer> <M-s>n		:silent normal ¡VS_nextE!<cr>
-    map <buffer> <M-s>N		:silent normal ¡VS_prevE!<cr>
-    map <buffer> <M-s>p		:silent normal ¡VS_prevE!<cr>
+    nmap <buffer> <M-n>			:silent normal ¡VS_nextE!<cr>
+    nmap <buffer> <M-p>			:silent normal ¡VS_prevE!<cr>
+    nmap <buffer> <M-s>n		:silent normal ¡VS_nextE!<cr>
+    nmap <buffer> <M-s>N		:silent normal ¡VS_prevE!<cr>
+    nmap <buffer> <M-s>p		:silent normal ¡VS_prevE!<cr>
 
-    nmenu 55.100 Spell\ &check.&Run\ spell\ checker<tab><M-s>r	¡VS_check!
-    nmenu 55.100 Spell\ &check.&Show\ mispellings<tab><M-s>s	¡VS_showE!
-    nmenu 55.100 Spell\ &check.Show\ &alternatives<tab><M-s>a	¡VS_alt!
-    nmenu 55.100 Spell\ &check.E&xit<tab><M-s>E			¡VS_exit!
+    nmenu 55.100 Spell\ &check.&Run\ spell\ checker<tab><M-s>r	
+	  \ :silent normal ¡VS_check!
+    nmenu 55.100 Spell\ &check.&Show\ mispellings<tab><M-s>s	
+	  \ :silent normal ¡VS_showE!
+    nmenu 55.100 Spell\ &check.Show\ &alternatives<tab><M-s>a	
+	  \ :silent normal ¡VS_alt!
+    nmenu 55.100 Spell\ &check.E&xit<tab><M-s>E			
+	  \ :silent normal ¡VS_exit!
     amenu 55.100 Spell\ &check.-----------------		<c-l>
     IfTriggers 
 	  \ nmenu 55.101 Spell\ &check.S&wap\ Language<tab><M-s>L ¡VS_swapL!
@@ -265,12 +269,28 @@ else
   endfunction " }}}
 endif
 
-  call VS_Maps_4_file_edited()
+" Define the maps when buffers are loaded {{{
+function! VS_CheckMapsLoaded(force)
+  if expand('%') !~ 'spell-corrector' 
+    if  !exists('b:VS_map_loaded')
+      let b:VS_map_loaded = 1
+      call VS_Maps_4_file_edited()
+    endif
+    if 1== a:force | call VS_Maps_4_file_edited() | endif
+  endif
+endfunction
+call VS_CheckMapsLoaded(1)
+
+augroup VS_maps
+  au!
+  au  BufNewFile,BufReadPost * :call VS_CheckMapsLoaded(0)
+augroup END
+" }}}
 
 " Part:		lhVimSpell/corrected buffer functions }}}
 "=============================================================================
 " Part:		lhVimSpell/interface to [ia]spell {{{
-" Last Update:	18th jul 2002
+" Last Update:	22nd jul 2002
 "------------------------------------------------------------------------
 " Description:	Interface functions for Vim-Spell to [ia]spell
 "------------------------------------------------------------------------
@@ -280,7 +300,8 @@ endif
 "
 
 "===========================================================================
-" Programs calls
+" Programs calls {{{
+" Function: VS_i_Call_Spell_type(type [,other parameter])  {{{
 function! VS_i_Call_Spell_type(type,...)
   if a:type == 'tex'                    | let mode = ' --mode='. a:type 
   elseif a:type =~'htm\|xml\|php\|incl' | let mode = ' --mode=sgml'
@@ -293,7 +314,9 @@ function! VS_i_Call_Spell_type(type,...)
   endif
   return ret
 endfunction
+" }}}
 
+" Function: VS_i_Call_Spell([parameter for ia-spell]) {{{
 function! VS_i_Call_Spell(...)
   if a:0 == 1
     ""return VS_i_Call_Spell_type(&ft,a:1)
@@ -303,10 +326,10 @@ function! VS_i_Call_Spell(...)
     return VS_i_Call_Spell_type("")
   endif
 endfunction
-
-
+" }}}
+" }}}
 "===========================================================================
-" List errors
+" List errors {{{
 
 function! VS_i_list_errors(filename)
   let type = matchstr(a:filename, '[^.]\{-}$')
@@ -314,9 +337,11 @@ function! VS_i_list_errors(filename)
   return system(VS_i_Call_Spell_type(type).' -l < '.a:filename.' | sort -u')
 endfunction
 
-"
+" }}}
 "===========================================================================
-" Get alternatives
+" Get alternatives {{{
+
+" Function: VS_i_get_alternatives(errors) {{{
 function! VS_i_get_alternatives(errors)
 "   if exists("g:VS_stripaccents") && g:VS_stripaccents == 1
 "     return system('echo "'.a:errors.'" \| '.
@@ -346,7 +371,9 @@ function! VS_i_get_alternatives(errors)
   return tmp
   ""call delete(tmp)
 endfunction
+" }}}
 
+" Function: VS_i_get_alternatives_by_file(filename) {{{
 function! VS_i_get_alternatives_by_file(filename)
   if exists("g:VS_stripaccents") && g:VS_stripaccents == 1
     return system('cat '.a:filename.' \| '.
@@ -355,10 +382,13 @@ function! VS_i_get_alternatives_by_file(filename)
     return system('cat ' .a:filename . ' \| '. VS_i_Call_Spell(' -a') )
   endif
 endfunction
+" }}}
 
+" }}}
 "===========================================================================
-" Maintenance
-" 
+" Maintenance {{{
+
+" Function: VS_i_aspell_directly_to_dict(word, lowcase) {{{
 function! VS_i_aspell_directly_to_dict(word,lowcase)
   " 1- Check we are using ASpell
   if (g:VS_spell_prog != "aspell")
@@ -376,11 +406,14 @@ function! VS_i_aspell_directly_to_dict(word,lowcase)
   " 2.c/ Add the word to the last line
   $put=a:word
   " 2.d/ chage it to lower case if required
-  if a:lowcase == 1 | normal guu | endif
+  if a:lowcase == 1 | normal guu 
+  endif
   " 2.e/ save and close
   w | bd
 endfunction
-" 
+" }}}
+
+" Function: VS_i_add_word_to_dict(word, lowcase) {{{
 " If the word to add contains accents, the function offer the choice to
 " directly add the word to the dictionary, without using ASPELL. 
 " Reason : aspell (under windows/MinGW-build only ?) is not able to add
@@ -413,11 +446,15 @@ function! VS_i_add_word_to_dict(word,lowcase)
     call delete(tmp)
   endif
 endfunction
+" }}}
+
+" }}}
+"===========================================================================
 
 " Part:		lhVimSpell/interface to [ia]spell }}}
 "=============================================================================
 " Part:		lhVimSpell/files management function {{{
-" Last Update:	18th jul 2002
+" Last Update:	22nd jul 2002
 "------------------------------------------------------------------------
 " Description:	Files Management functions for Vim-Spell to [ia]spell
 "------------------------------------------------------------------------
@@ -456,9 +493,7 @@ function! VS_parse_file(filename) " {{{
   " 4- ...
     call VS_Maps_4_file_edited()
 endfunction " }}}
-
 "===========================================================================
-" 
 function! VS_ExitSpell() " {{{
   if &ft != "vsgui" | call VS_g_Open_Corrector() | endif
   bd!
@@ -471,9 +506,8 @@ function! VS_ExitSpell() " {{{
     unlet g:VS_line_height
   endif " }}}
 endfunction " }}}
-
 "===========================================================================
-" Clear errors
+" Clear errors {{{
 function! VS_show_errors() " {{{
     let @_=CheckSpellLanguage()
     let spell_options = b:spell_options
@@ -552,14 +586,15 @@ function! VS_show_errors() " {{{
     endif " }}}
     return 1
 endfunction " }}}
-
-
+" }}}
 "===========================================================================
 "===========================================================================
-" Name of the file listing the errors
-" -> <spath>/.spell/errors-list
-" Format: by line : the one produced by : echo 'word' | aspell -a
+" Names of the different files used {{{
+"
+" Ex.: name of the file listing the errors
+" 	-> <spath>/.spell/errors-list
 
+" Function: VS_f_check_for_VS_path(path) {{{
 function! VS_f_check_for_VS_path(path)
     let path = fnamemodify(a:path,':p:h')
   let path = fnamemodify(a:path . '/.spell', ':p')
@@ -586,25 +621,39 @@ function! VS_f_check_for_VS_path(path)
     endif
   endif
 endfunction
+" }}}
 
+" Function: VS_f_error_list_file(path) {{{
+" Returns: 	The name of the errors list file according to the equired path
+" NB:		Checks the path exists
+" Format:	by line : the one produced by : echo 'word' | aspell -a
 function! VS_f_error_list_file(path)
   call VS_f_check_for_VS_path(a:path)
   return a:path . '/.spell/errors-list'
 endfunction
+" }}}
 
+" Function: VS_f_ignore_list_file(path) {{{
+" Returns: 	The name of the file containing the ignored words according to
+" 		the equired path 
+" NB:		Checks the path exists
 function! VS_f_ignore_list_file(path)
   call VS_f_check_for_VS_path(a:path)
   return a:path . '/.spell/ignore-list'
 endfunction
+" }}}
 
+" Function: VS_f_corrector_file(path) {{{
+" Returns:	The name of the file used for the corrector buffer
 function! VS_f_corrector_file(path)
   let path = fnamemodify(a:path . '/.spell', ':p:h')
   return a:path . '/.spell/spell-corrector'
 endfunction
+" }}}
 
-
+" }}}
 "===========================================================================
-" Check for New Errors
+" Check for New Errors {{{
 function! VS_CheckNewErrors(path,errors)
   " 0- File name of the list-errors file
     let elf = VS_f_error_list_file(a:path)
@@ -635,16 +684,17 @@ function! VS_CheckNewErrors(path,errors)
     call delete(tmp)
     return 1
 endfunction
-
+" }}} 
 "===========================================================================
-" Build Alternatives for a list of errors
+" Build Alternatives for a list of errors {{{
 
 function! VS_f_build_alternatives(errors)
   return VS_i_get_alternatives(a:errors)
 endfunction
 
+" }}}
 "===========================================================================
-" Compare new errors to errors-list 
+" Compare new errors to errors-list {{{
 function! VS_f_compare(elf,errors)
     call FindOrCreateBuffer(a:elf,1)	" from a.vim
     let g:err = a:errors
@@ -664,9 +714,11 @@ function! VS_f_compare(elf,errors)
     bd
     return new
 endfunction
-"
+" }}}
 "===========================================================================
-" Functions to manage ignored words
+" Functions to manage ignored words {{{
+"
+" Function: VS_f_search(pat) {{{
 function! VS_f_search(pat)
   if version < 600
     let old_ = v:errmsg
@@ -679,7 +731,9 @@ function! VS_f_search(pat)
     return search(a:pat) == 0
   endif
 endfunction
+" }}}
 
+" Function: VS_f_add_word_to_ignore_file(word) {{{
 function! VS_f_add_word_to_ignore_file(word)
     let ilf = VS_f_ignore_list_file(expand("%:p:h"))
     if strlen(ilf)==0 | return | endif
@@ -691,60 +745,67 @@ function! VS_f_add_word_to_ignore_file(word)
     endif
     w | bd
 endfunction
-
+" }}}
+" }}}
 "===========================================================================
+" Move from one error to the next {{{
+"
 " Functions stolen in David Campbell's engspchk.vim
 "
-  function! VS_SpchkNext()
-    ""let errid   = synIDtrans(hlID("Error"))
-    let errid = hlID("SpellErrors")
-    let lastline= line("$")
-    let curcol  = 0
+" Function: VS_SpchkNext() {{{
+function! VS_SpchkNext()
+  ""let errid   = synIDtrans(hlID("Error"))
+  let errid = hlID("SpellErrors")
+  let lastline= line("$")
+  let curcol  = 0
 
+  norm w
+
+  " skip words until we find next error
+  ""while synIDtrans(synID(line("."),col("."),1)) != errid
+  while synID(line("."),col("."),1) != errid
     norm w
+    if line(".") == lastline
+      let prvcol=curcol
+      let curcol=col(".")
+      if curcol == prvcol | break | endif
+    endif
+  endwhile
 
-    " skip words until we find next error
-    ""while synIDtrans(synID(line("."),col("."),1)) != errid
-    while synID(line("."),col("."),1) != errid
-      norm w
-      if line(".") == lastline
-        let prvcol=curcol
-        let curcol=col(".")
-        if curcol == prvcol | break | endif
-      endif
-    endwhile
+  " cleanup
+  unlet curcol
+  unlet errid
+  unlet lastline
+  if exists("prvcol") | unlet prvcol | endif
+endfunction
+" }}}
+" -------------------------------------------------------------------
+" Function: VS_SpchkPrev() {{{
+function! VS_SpchkPrev()
+  "let errid = synIDtrans(hlID("Error"))
+  let errid = hlID("SpellErrors")
+  let curcol= 0
 
-    " cleanup
-    unlet curcol
-    unlet errid
-    unlet lastline
-    if exists("prvcol") | unlet prvcol | endif
-  endfunction
+  norm b
 
-  " -------------------------------------------------------------------
-  function! VS_SpchkPrev()
-    "let errid = synIDtrans(hlID("Error"))
-    let errid = hlID("SpellErrors")
-    let curcol= 0
-
+  " skip words until we find previous error
+  "while synIDtrans(synID(line("."),col("."),1)) != errid
+  while synID(line("."),col("."),1) != errid
     norm b
+    if line(".") == 1
+      let prvcol=curcol
+      let curcol=col(".")
+      if curcol == prvcol | break | endif
+    endif
+  endwhile
 
-    " skip words until we find previous error
-    "while synIDtrans(synID(line("."),col("."),1)) != errid
-    while synID(line("."),col("."),1) != errid
-      norm b
-      if line(".") == 1
-        let prvcol=curcol
-        let curcol=col(".")
-        if curcol == prvcol | break | endif
-      endif
-    endwhile
-
-    " cleanup
-    unlet curcol
-    unlet errid
-    if exists("prvcol") | unlet prvcol | endif
-  endfunction
+  " cleanup
+  unlet curcol
+  unlet errid
+  if exists("prvcol") | unlet prvcol | endif
+endfunction
+" }}}
+" }}}
 
 " Part:		lhVimSpell/file management function }}}
 "=============================================================================

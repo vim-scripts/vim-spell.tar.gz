@@ -1,8 +1,8 @@
 # VIM: let g:VS_language = 'american' 
-*VS_help.txt*	For Vim version 5.7.+	Last change: 18th jul 2002
+*VS_help.txt*	For Vim version 5.7.+	Last change: 22nd jul 2002
 *lhVimSpell*
 		VIM Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.3b
+			VIM-Spell version 0.3c
 
 
 ------------------------------------------------------------------------------
@@ -539,5 +539,5 @@ References:~
      <http://www.highley-recommended.com/text-processing.html>
 
 ------------------------------------------------------------------------------
- © Luc Hermitte, 2001-2002 <http://hermitte.free.fr/vim>
+ © Luc Hermitte, 2001-2002 <http://hermitte.free.fr/vim/>
  vim:ts=8:sw=8:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ft=help:

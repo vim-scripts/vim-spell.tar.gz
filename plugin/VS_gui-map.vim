@@ -1,6 +1,6 @@
 "=============================================================================
 " Part:		lhVimSpell/mappings for the corrector buffer {{{
-" Last Update:	03rd jul 2002
+" Last Update:	22nd jul 2002
 "------------------------------------------------------------------------
 " Description:	Defines the mappings and menus for the Corrector buffer.
 "------------------------------------------------------------------------
@@ -13,7 +13,7 @@
 "
 " Planned to be used through buffoptions2.vim ; *MUST* be in unix
 " fileformat on order to correctly be prossessed by buffoptions2.vim
-"
+" Help {{{
 function! VS_add2help(msg, help_var) " {{{
   if (!exists(a:help_var))
     exe 'let ' . a:help_var . '   = a:msg'
@@ -64,8 +64,10 @@ function! VS_toggle_gui_help() " {{{
   let g:VS_display_long_help = 1 - g:VS_display_long_help
   Silent call VS_g_Make(b:word)
 endfunction " }}}
-
+"
+" }}}
 " ======================================================================
+" Mappings {{{
 if version < 600
   function! VS_g_AltMaps() " {{{
     noremap <cr>		:call SA_return(line('.'))<cr>
@@ -140,8 +142,8 @@ else
     noremap <buffer> <2-LeftMouse>	:silent! :call SA_return(line('.'))<cr>
     noremap <buffer> A			:silent! :call SA_all(line('.'))<cr>
     noremap <buffer> B			:silent! :call SA_all_buffers(line('.'))<cr>
-    noremap <buffer> *			:silent! :call VS_g_AddWord(0)<cr>
-    noremap <buffer> &			:silent! :call VS_g_AddWord(1)<cr>
+    noremap <buffer> *			:silent  :call VS_g_AddWord(0)<cr>
+    noremap <buffer> &			:silent  :call VS_g_AddWord(1)<cr>
     noremap <buffer> i			:silent! :call VS_g_IgnoreWord()<cr>
     noremap <buffer> <esc>		:silent! :call SA_return(-1)<cr>
 
@@ -177,6 +179,8 @@ else
     nnoremap <buffer> 9			:VSChooseWord 9
   endfunction " }}}
 endif
+" }}}
+
 " Part:		lhVimSpell/mappings for the corrector buffer }}}
 "$------------------------------------------------------------------------
 "$ vim600: set fdm=marker:
