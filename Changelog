@@ -1,7 +1,72 @@
-ChangeLog File for Vim-Spell
-----------------------------
+ChangeLog File for lhVimSpell
+-----------------------------
 
-Var 0.3c: 22nd jul 2002 
+Ver 0.5: 07th feb 2003
+* From now on, only VIM 6.x is supported
+* Simplifications
+* Neither `cat' nor `TYPE' are used anymore.
+* On a pure MsWindows box, 'sort | uniq' is emulated (thanks to
+  system_utils.vim). If unixutils or Cygwin is installed and configured (ie,
+  $PATH set in consequence), then set in .vimrc: g:unix_layer_installed to 1.
+  The emulation of `sort' is much more slower than any sort.exe ; and
+  Microsoft's SORT.EXE is inadequate as it is not case sensitive.
+* Try to guess if Aspell or Ispell should be used according to their
+  visibility from $PATH Done thanks to searchInRuntime.vim (if installed) or
+  `which' on *nix systems.
+* The path of the personal dictionaries is build with 'aspell config'
+  $ASPELL is _no_ longer used!
+* Jumping to prev/next misspelling doesn't move the cursor if there is no
+  misspelling after or before the current position.
+* Undo/redo resynch with the current word
+* File type detection enhanced
+* More accurate use of messages and `:silent' 
+* Fewer number of "uncatched exceptions"
+  - Can't ask for alternatives if files haven't been parsed first.
+  - Can't show misspellings if files haven't been parsed first.
+* VS_language can be local to the current buffer
+* option: g:VS_map_leader (default to <M-s> on windows when &wak='no' ;
+  <leader>s otherwise)
+  Must be set before the plugin is loaded -> .vimrc
+* Option: g:VS_jump_next_error_after changed into:
+  g:VS_jump_to_next_error_after_validation
+* Menus: 
+  - are now customizable with g:VS_menu_priority and g:VS_menu_name
+    Must be set before the plugin is loaded -> .vimrc
+  - are loaded/unloaded and enabled according to the type of the current
+    window (ie: corrector-windows or not)
+  - Menus are synchronized with g:VS_map_leader, but not with any other
+    customisation done by remapping to <Plug>VS_xxx.
+  # but can't be submenu of standard menus is v:lang !~ English'
+* The default colorscheme used for misspellings can be overrided with for
+  instance:
+  :highlight default SpellErrors ctermfg=Green guifg=Green cterm=underline gui=underline term=reverse
+  Note: The default links `SpellErrors' to `Errors'.
+* :VSVerbose ...
+* Uses of :normal have been securized -> s/normal/normal!/
+* a.vim changed into a.old.vim
+* Help file updated
+
+Ver 0.4: 04th feb 2003
+* pathnames having spaces within are now supported on MsWindows (with Cygwin
+  and $COMSPEC)
+  But this requires system_utils.vim, which only works with vim 6.0+
+* A new section about troubles on MsWindows have been added to the help file
+* Microsoft's `TYPE' can be used instead of `cat'.
+* Minor changes to the help file
+
+Ver 0.3e: 04th aug 2002
+* Changed $LANG to v:lang ; check your customization...
+* Help file updated
+
+Ver 0.3d: 30th jul 2002
+* Fix a little bug with ignored words
+  e.g.  wasn't able to add 'filetype' when 'filetypes' was present in the list
+  of ignored words list.
+* for VIM 6, mappings can be changed :
+  - thanks to ':map ... <Plug>VS_foo' approach
+* Help file updated
+
+Ver 0.3c: 22nd jul 2002 
 * The mappins are correctly set when editing several files with for instance
   > vim *.tex
 * Fix a bug into VS_..add_word_directly_to_dict()
@@ -22,7 +87,7 @@ Ver 0.3: 03rd jul 2002
 * First functional release of a non developper version
 * Options more accessible
 * Added g:VS_goto_next_error_after to jump to the next misspelling after a
-  correction / ignore [idea from Matthias Veit plugin]
+  correction / ignore [idea from Matthias Veit's plugin]
 * Take advantage of $LANG in order to determine the default value for
   g:VS_language
 * Help file updated
@@ -35,8 +100,8 @@ Ver 0.2d: 27th feb 2002
 Ver 0.2c: 25th feb 2002 
 * Still some dependencies reduced :
   - a.vim is added to the archive. The version is an old one that works with
-    VIM 5.7, and the functions defined are not encapsulated (hidden), contrary
-    to the latest version.
+    VIM 5.7, where the functions defined are not encapsulated (hidden),
+    contrary to the latest version.
 * Ignore feature improved    
   - The un-highlighting of ignored words has been fixed.
   - Ignored words are stored in a file in the ./.spell folder. Hence, they are
@@ -56,18 +121,18 @@ Ver 0.2b: 30th Jan 2002
     use Vim-Spell without Triggers.vim. As a consequence, the swapping
     language feature will be disabled. The detection of Triggers.vim is
     completely transparent.
-  - dependencies toward a.vim and cat will remains.
+  - dependencies towards a.vim and cat will remains.
 * The help message for the Corrector buffer exists can be hidden
 
 Ver 0.2: 27th Jan 2002 
 * Slowly converted to version 6.0 of VIM :
   - The use of buffoption 2 is no more required with VIM 6.
     With VIM 5.xx, there is no way around.
-    Unfortunately, using VIM 6.0 does not permit to have buffered menus --
+    Unfortunately, using VIM 6.0 does not permit to have local menus --
     ie. menus associated to a buffer.
   - The mappings are all silent under VIM 6.0
   - In order to let this plugin usable from VIM 5.x and VIM 6, none of the
-    other improvements from the 6th version will be used (s:, <Plug>, <unique>,
+    other improvements from the 6th version are used (s:, <Plug>, <unique>,
     <SID>, etc.)
   -> <VS_*map*.vim>
 * First fix to the insertion of accentuated words
@@ -75,14 +140,14 @@ Ver 0.2: 27th Jan 2002
   with Aspell (compiled with MinGW, under Windows); I added the possibility to
   directly add words within the personal dictionary.
   -> <VS_int-fun.vim>
-* In the continuation of the previous fix, there a new option :
+* In the continuation of the previous fix, there is a new option:
   «g:VS_aspell_add_directly_to_dict» that enable to directly modify the
   personal dictionary without using Aspell. This option is to be used with
   care, I can't guaranty Aspell will always use the same format for pers.
   dict.  neither it works with ispell. This way of proceeding is much more
   quicker than using the pipe protocol.
   -> <VS_int-fun.vim>
-* Correct the replacement of word :
+* Correct the replacement of word:
   If a key sequence of a mapping is included within the word that will replace
   the current misspelling, the mapping is no more expanded/executed. Hence,
   "û" can replace "u" even if "<M-{>" is mapped to something.
