@@ -7,10 +7,10 @@
 <PRE>
 # <A HREF="#VIM">VIM</A>: let <A HREF="#g:VS_language">g:VS_language</A> = 'american' 
 
-*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 27th feb 2002
+*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 03rd jul 2002
 
 		<A HREF="#VIM">VIM</A> Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.2d
+			VIM-Spell version 0.3
 
 
 ------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ that use the |<A HREF="#IA-spell">IA-spell</A>| pipe protocol.
 As its name suggests, the main feature of this plugin is to add spell-checking
 functionalities to <A HREF="#VIM">VIM</A>. 
 
-VIM-Spell defines two operating modes ; each one being associate to a buffer.
+VIM-Spell defines two operating modes ; each one being associated to a buffer.
 The first mode is associated to the buffer of the text spell-checked. The
 second one is a view that suggests alternatives to a misspelling. See for
 instance :
@@ -67,7 +67,7 @@ instance :
       &#42; |<A HREF="#Ignore">Ignore</A>| the fact that the word is misspelled,
       &#42; |<A HREF="#Add">Add</A>| the word to the personal dictionary,
       &#42; |<A HREF="#Undo/redo">Undo/redo</A>| the last action,
-      &#42; |<A HREF="#Jump">Jump</A>| from one misspellings to the next/previous,
+      &#42; |<A HREF="#Jump">Jump</A>| from one misspelling to the next/previous,
       &#42; |<A HREF="#Hide_Help">Hide_Help</A>| message for the Corrector mode, or display it.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -97,7 +97,7 @@ instance :
   Both modes.
 
   Puts the cursor under the next/previous misspelling.
-  In <A HREF="#corrector-mode">corrector-mode</A>, it also actuates the alternatives proposed to match the
+  In <A HREF="#corrector-mode">corrector-mode</A>, it also updates the alternatives proposed to match the
   new current misspelling.
 
 
@@ -113,9 +113,9 @@ instance :
   Main mode.
 
   Changes the value of the option |<A HREF="#g:VS_language">g:VS_language</A>| in order to be turn after
-  turn : &quot;American&quot; or &quot;French&quot;. You will certainly want to change this, do it
-  within VS_map.vim. BTW, this feature requires you have installed my
-  |<A HREF="#triggering">triggering</A>| plugin, otherwise it won't be enabled.
+  turn : &quot;American&quot; or what is your default value for |<A HREF="#g:VS_language">g:VS_language</A>|. BTW,
+  this feature requires you have installed my |<A HREF="#triggering">triggering</A>| plugin, otherwise
+  it won't be enabled.
 
 
 *<A NAME="Alternatives"></A><B>Alternatives</B>*  Ask for alternatives -- &lt;M-s&gt;a
@@ -187,7 +187,7 @@ instance :
   alphanumeric characters), this function will propose to directly insert the
   word into the dictionary as if |<A HREF="#g:VS_aspell_add_directly_to_dict">g:VS_aspell_add_directly_to_dict</A>| was set to
   true. Hence, all the corresponding warnings apply.
-  This way of proceding comes from the fact I wasn't able to add accentuated
+  This way of proceeding comes from the fact I wasn't able to add accentuated
   words to the personal dictionary through the pipe protocol with <A HREF="#Aspell">Aspell</A> .33.5
   alpha compiled with MinGW and used under Windows NT. Any hint/comment on
   this point is welcome.
@@ -201,7 +201,7 @@ instance :
 
 
 *<A NAME="Undo/redo"></A><B>Undo/redo</B>*	<A HREF="#Undo/redo">Undo/redo</A> the last action -- u / &lt;C-R&gt;
-  Corrector mode :: dictionary management
+  Corrector mode :: correction
 
   <A HREF="#Undo/redo">Undo/redo</A> the last action that has occurred in the main buffer. This is
   helpful to undo a change without (because we haven't click on the right line
@@ -213,7 +213,7 @@ instance :
   Corrector mode :: 
 
   Display or hide a several lines help message that sums up the different
-  key-bindings used whitin the Corrector Mode.
+  key-bindings used within the Corrector Mode.
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -236,7 +236,7 @@ looking for the alternatives of a misspelling is an instantaneous operation.
 All the current misspellings are remembered. It may not be useful in the long
 run except for recurrent misspellings. But, the replacing feature will make
 this behavior useless and hence we will be able to delete the cache-file
-between two sessions.  cf. |<A HREF="#todo-replace">todo-replace</A>|
+between two sessions. cf. |<A HREF="#todo-replace">todo-replace</A>|
 
 Regarding the highlighting policy, every word is considered OK except those
 detected misspelled by the |<A HREF="#IA-spell">IA-spell</A>| tool. This is the opposite approach of
@@ -250,44 +250,51 @@ often erased, this will enable to manage smaller lists of words.
 <B><FONT COLOR="PURPLE">Installation notes: </FONT></B>
 
 <B><FONT COLOR="PURPLE">  Files of the plugin: </FONT></B>
-    The plugin is composed of 7 files plus this file and its HTML version :
-      - VS-all.vim	: the file to be sourced, it sources the others ;
-      - VS_deps.vim	: contains some commands that helps to reduce
-			  dependencies toward other <A HREF="#VIM">VIM</A> plugins ;
-      - VS_fm-fun.vim	: file management functions ;
-      - VS_gui.vim	: functions relatives to the corrector GUI ;
-      - VS_int-fun.vim	: internal function wrapping the calls to |<A HREF="#IA-spell">IA-spell</A>| ;
-      - VS_map.vim	: mappings defined in the main buffer ;
+    The plugin is composed of 2 files plus this file and its HTML version :
+      - lhVimSpell.vim  : the main file, theone that must be sourced
       - VS_gui-map.vim	: mappings defined in the corrector buffer. 
 
     They could be downloaded as a tarball archive at :
 	<A HREF="http://hermitte.free.fr/vim/ressources/vim-spell.tar.gz">http://hermitte.free.fr/vim/ressources/vim-spell.tar.gz</A>
 
-    I think that the best thing to do is to extract them in a dedicated folder
-    with for instance : gzip -cd VS.tar.gz &#124; tar xf -
-    Personnaly, I extract it within $VIM/macros/ which creates a new folder.
-    I choose not to put it in my plugins folder, and source VS-all.vim only
-    with specific filetypes (like tex and html,php,...) thanks to their
-    respective ftplugins.
-    If you want to proceed otherwise, look at the comments whitin VS-all.vim.
+    Once you have extracted the archive, with for instance : gzip -cd
+    VS.tar.gz &#124; tar xf -, you will have to move the files to differents
+    directories. Several approaches are possible regarding the version of <A HREF="#VIM">VIM</A>
+    used.
 
     Note by the way that you will also require the |<A HREF="#alternate">alternate</A>| plugin. You
     will find an old version joined in this archive.
 
 <B><FONT COLOR="PURPLE">  VIM 5.xx</FONT></B>
-    The <A HREF="#VIM">VIM</A> version I use is the 5.7. Hence all the features from this plugin
-    do work fine under these old releases.
-    But. There is a 'but'. The mappings for the corrector-buffer imply they
-    are unloaded out of the buffer. Indeed, I remap things like &lt;cr&gt;, a, i,
-    &lt;tab&gt;, 0, 1, ..., 9, and so on. I wouldn't have done so if there didn't
-    exist a way to implement buffer-relative mappings with these old versions
-    of <A HREF="#VIM">VIM</A>. So, to make it straight, download |<A HREF="#buffoption">buffoption</A>| and copy it
-    into your $VIMRUNTIME/macros folder. I also suggest you take a look on a
-    my page about &quot;File-type plugin emulation on <A HREF="#VIM">VIM</A> 5.xx&quot; for more
-    explanations.
+    Regarding the files from the archive :
+      - drop the three .vim files into your $VIM/macros/ directory
+      - keep the documentation around
+      - and source lhVimSpell.vim whenever you need the plugin (manually,
+	automatically from the .vimrc, or automaticaly thanks to ftplugin-like
+	facilities).
+
+    The mappings for the corrector-buffer imply they are unloaded out of the
+    buffer. Indeed, I remap things like &lt;cr&gt;, a, i, &lt;tab&gt;, 0, 1, ..., 9, and
+    so on. I wouldn't have done so if there didn't exist a way to implement
+    buffer-relative mappings with these old versions of <A HREF="#VIM">VIM</A>. So, to make it
+    straight, download |<A HREF="#buffoption">buffoption</A>| and copy it into your $VIMRUNTIME/macros
+    folder. I also suggest you take a look on a my page about &quot;File-type
+    plugin emulation on <A HREF="#VIM">VIM</A> 5.xx&quot; for more explanations.
 	<A HREF="http://hermitte.free.fr/vim/ftplugin.php3">http://hermitte.free.fr/vim/ftplugin.php3</A>
 
 <B><FONT COLOR="PURPLE">  VIM 6.0</FONT></B>
+    Let's note $$ to represent $HOME/.vim/ (on *NIX systems) or
+    $HOME/vimfiles/ (on Ms-Windows systems) ; check &quot;:help 'runtimepath&#39;&#34;' for
+    other systems. Then, 
+      - drop the documentation files into $$/doc/ and execute (from <A HREF="#VIM">VIM</A>)
+	':helptags $$/doc' once.
+      - If you want the plugin to be systematically run: drop the three vim
+	files into your $$/plugin/ directory
+	Or, if you want the plugin to be run only in specific situations:
+	drop them into your $$/macros/ directory, and source it whenever you
+	need it. For instance, I execute &quot;:runtime macros/lhVimSpell.vim&quot;
+	from my TeX ftplugin.
+
     As I have just said, the &quot;maps local to a buffer&quot; mechanism is required by
     VIM-Spell to work correctly. It is directly supported under <A HREF="#VIM">VIM</A> 6.0,
     without any other plugin required. However, as |<A HREF="#buffoption">buffoption</A>| is not used,
@@ -305,22 +312,28 @@ often erased, this will enable to manage smaller lists of words.
 	used in French.
     BTW, notice that &lt;M-s&gt; and &lt;M-S&gt; are two different key strokes.
 
-    So, if you want to change the default mappings, just edit the files with
-    &quot;map&quot; within -- e.g. gvim VS_*map.vim -- and make your customizations.
+    So, if you want to change the default mappings, just edit the third part
+    of lhVimSpell.vim (lhVimSpell/corrected buffer functions) and
+    VS_gui-map.vim and make your customizations.
+    If required, I'll try to improve the customization of mappings.
 
 <B><FONT COLOR="PURPLE">  Last thing:</FONT></B>
     I'm aware that this plugin is quite complex. It is the price for all its
     features. It depends on external plugins and even external (but common for
-    <A HREF="#VIM">VIM</A> users I guess) tools. For maintenance aspects, it is composed of
-    several inter-dependant files. And for compatibility reasons, I've chosen
-    to use as few new <A HREF="#VIM">VIM</A> 6.0 features as possible.
+    <A HREF="#VIM">VIM</A> users I guess) tools. For compatibility reasons, I've chosen to use as
+    few new <A HREF="#VIM">VIM</A> 6.0 features as possible. For maintenance aspects, it is
+    developped as several inter-dependant files ; if you want to hack the
+    plugin, you'd better look at the &quot;developpers&quot; version :
+	<A HREF="http://hermitte.free.fr/vim/ressources/vim-spell-dev.tar.gz">http://hermitte.free.fr/vim/ressources/vim-spell-dev.tar.gz</A>
+
 
     Regarding my choices of folders between $VIM and $VIMRUNTIME, they are
     guided from the fact I've installed <A HREF="#VIM">VIM</A> 5.7 and <A HREF="#VIM">VIM</A> 6.0 on my Windows NT
-    system.  All the common and compatible (ft)plugins are in $VIM/(ft)plugin
+    system. All the common and compatible (ft)plugins are in $VIM/(ft)plugin
     while specific stuff is in the respective $VIMRUNTIME folders. If your
-    installation is simple, I suggest you use $VIMRUNTIME everywhere.
-    Sometimes, I will write a note about this cohabitation topic.
+    installation is simple, I suggest you use $VIMRUNTIME (VIM 5.x), and $$
+    (VIM 6.x) everywhere. Sometimes, I will write a note about this
+    cohabitation topic.
 
 
 ------------------------------------------------------------------------------
@@ -331,29 +344,32 @@ often erased, this will enable to manage smaller lists of words.
 The options are global. Making them buffer relative caused me a lot of
 troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
 
+If you want to change their values, do it into your .vimrc or any other plugin
+loaded before, or even after, VIM-Spell.
 
-*<A NAME="g:VS_language"></A><B>g:VS_language</B>*	string (...)
+
+*<A NAME="g:VS_language"></A><B>g:VS_language</B>*	string (...) ; default based on $LANG
   This option defines the language/dictionary used. cf. the --master option of
-  |<A HREF="#IA-spell">IA-spell</A>|.
+  |<A HREF="#IA-spell">IA-spell</A>|. If your configuration is not explicitly supported, you may have
+  to extend the functions VS_default_language() and VS_personal_dict() ; let
+  me know about it.
 
-  BTW, you may want to customize the |<A HREF="#Swap">Swap</A>| languages.
 
-
-*<A NAME="g:VS_spell_prog"></A><B>g:VS_spell_prog</B>* string ('ispell'/'aspell')
+*<A NAME="g:VS_spell_prog"></A><B>g:VS_spell_prog</B>* string ('ispell'/'aspell') ; default : 'aspell'
   This option must be used to set which |<A HREF="#IA-spell">IA-spell</A>| tool is used : <A HREF="#Ispell">Ispell</A> or
   <A HREF="#Aspell">Aspell</A> -- or any upcoming clone.
 
 
-*<A NAME="g:VS_strip_accents"></A><B>g:VS_strip_accents</B>* boolean (0/1)
+*<A NAME="g:VS_strip_accents"></A><B>g:VS_strip_accents</B>* boolean (0/1) ; default : 0
   Directly passed to |<A HREF="#IA-spell">IA-spell</A>| if defined.
 
 
-*<A NAME="g:VS_aspell_add_directly_to_dict"></A><B>g:VS_aspell_add_directly_to_dict</B>* boolean (0/1)
+*<A NAME="g:VS_aspell_add_directly_to_dict"></A><B>g:VS_aspell_add_directly_to_dict</B>* boolean (0/1) ; default 0
   This trick enables to quicken the insertion of words into the personal
-  dictionary. I guess it will only work with |<A HREF="#Aspell">Aspell</A>|. I've tested this
+  dictionary. I guess it will work only with |<A HREF="#Aspell">Aspell</A>|. I've tested this
   approach with <A HREF="#Aspell">Aspell</A> .33.5 alpha ; I can't guarantee that it will always
   work with future versions of <A HREF="#Aspell">Aspell</A>. By default, this option is set to false
-  (ie.  0).
+  (ie. 0).
   If you want to use it, please check :
   - You are using <A HREF="#Aspell">Aspell</A> or at least the format of your personal dictionary
     looks like : &quot;xxxx &lt;number_of_entries&gt;&quot; on the first line, while the
@@ -367,6 +383,16 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
   regarding the language used, etc.
 
 
+*<A NAME="g:VS_display_long_help"></A><B>g:VS_display_long_help</B>* boolean (0/1) ; default 0
+  Tells, next time the corrector window is opened, if the help will be
+  displayed in its totality or not.
+
+
+*<A NAME="g:VS_jump_next_error_after"></A><B>g:VS_jump_next_error_after</B>* boolean (0/1) ; default 1
+  When true, some operations (|<A HREF="#Correct">Correct</A>|, |<A HREF="#Add">Add</A>| word to dictionary, |<A HREF="#Ignore">Ignore</A>|
+  word) from the corrector window will provoke the cursor to move to the next
+  misspelling.
+
 ------------------------------------------------------------------------------
 
 								*<A NAME="Future"></A><B>Future</B>*
@@ -378,7 +404,7 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
     Setting the file-type will cancel the highlighting of misspellings ; So,
     try to avoid to reset it every time the buffer is reloaded -- this could
     be observed with the affectation of &amp;filetype within modelines like with
-    this file.  
+    this file.
 
     When we hit '*' in the Corrector mode, a space must be hit in order to
     activate the associated mapping.
@@ -416,12 +442,15 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
     &#42; <A HREF="#Add">Add</A> <A HREF="#g:VS_language">g:VS_language</A> to the names of cached files.
     &#42; Being able to ask for alternatives on the fly ; i.e. not only for
       cached misspellings.
+    &#42; Improve the customization possibilities of the mappings -- some people
+      like mappings starting with backslashes.
 
     &#42; Better handling of the splitted window for a more ergonomic plugin.
     &#42; Option for vertical splitting of window with vim6 ; could be nicest.
     &#42; Option for displaying suggested alternatives in a popup-menu ; why not.
     &#42; Delete unneeded code
-    &#42; Silent execution under <A HREF="#VIM">VIM</A> 6 to be improved
+    &#42; Silent execution under <A HREF="#VIM">VIM</A> 6 to be improved -- allow messages for
+      instance.
     &#42; <A HREF="#VIM">VIM</A> 6 local menus ; works fine with <A HREF="#VIM">VIM</A> 5.7 + buffoption.vim
 
 
@@ -456,7 +485,7 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
 
     <A HREF="#Aspell">Aspell</A>						*<A NAME="Aspell"></A><B>Aspell</B>*
      &quot;<A HREF="#Aspell">Aspell</A> is an Open Source spell checker designed to eventually replace
-     <A HREF="#Ispell">Ispell</A>.  Its main feature is that it does a much better job of coming up
+     <A HREF="#Ispell">Ispell</A>. Its main feature is that it does a much better job of coming up
      with possible suggestions than <A HREF="#Ispell">Ispell</A> does. In fact recent tests shows
      that it even does better than Microsoft Word 97's spell checker in some
      cases.&quot;
@@ -503,7 +532,7 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
    
 
     Claudio Fleiner's vimspell.vim. 			*<A NAME="vimspell"></A><B>vimspell</B>*
-     This plugins is the one that inspired me at first.  It generates the list
+     This plugins is the one that inspired me at first. It generates the list
      of misspelled words through a call to |<A HREF="#IA-spell">IA-spell</A>|, then highlights them in
      the Error syntax style. It permits to : - jump from a misspelled word to
      the next one, - add them to the |IA-spell|'s dictionary, - ignore them, 
@@ -518,23 +547,23 @@ troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
      another, and manages the dictionary. With <A HREF="#VIM">VIM</A> v6.0+, it can compute
      alternative words.
      I've stolen my jumping functions, and TeX highlighting rules from this
-     plugin.  
+     plugin.
 	<A HREF="http://www.erols.com/astronaut/vim/index.html#Spelling">http://www.erols.com/astronaut/vim/index.html#Spelling</A>
 
 
     Matthias Veit's spellcheck.vim for <A HREF="#VIM">VIM</A> 6 (only ?)	*<A NAME="spellcheck"></A><B>spellcheck</B>*
-     Require <A HREF="#Aspell">Aspell</A> and ruby =&gt; I haven't tested it.  It seems that I permit
+     Require <A HREF="#Aspell">Aspell</A> and ruby =&gt; I haven't tested it. It seems that I permit
      much more things.
 	<A HREF="http://vim.sf.net/scripts/script.php?script_id=131">http://vim.sf.net/scripts/script.php?script_id=131</A>
 
 
     Johannes Zellner's Aspell.vim for <A HREF="#VIM">VIM</A> 6.0		*<A NAME="JZ"></A><B>JZ</B>*
-     Another spellchecking plugin wrapping <A HREF="#Aspell">Aspell</A>.
+     Another spell-checking plugin wrapping <A HREF="#Aspell">Aspell</A>.
 	<A HREF="http://www.zellner.org/vim/autoload/Aspell.vim">http://www.zellner.org/vim/autoload/Aspell.vim</A>
 
 
     Yegappan Lakshmanan's spell.vim			*<A NAME="YL"></A><B>YL</B>*
-     Plugin that wraps calls to the UNIX spellchecker : spell. It can also
+     Plugin that wraps calls to the UNIX spell-checker : spell. It can also
      parses selected text, and not only files. But no alternatives proposed.
 	<A HREF="http://vim.sf.net/scripts/script.php?script_id=232">http://vim.sf.net/scripts/script.php?script_id=232</A>
 

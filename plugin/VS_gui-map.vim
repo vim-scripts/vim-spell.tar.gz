@@ -1,14 +1,11 @@
-" -*- VIM -*-
-" Defines the mappings and menus for the Corrector buffer.
-"
-" File:		VS_gui-map.vim
-" Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
-" 		<URL:http://hermitte.free.fr/vim>
-" Ver:		0.2b
-" Last Update:	30th jan 2002
-"
-"===========================================================================
-"
+"=============================================================================
+" Part:		lhVimSpell/mappings for the corrector buffer {{{
+" Last Update:	03rd jul 2002
+"------------------------------------------------------------------------
+" Description:	Defines the mappings and menus for the Corrector buffer.
+"------------------------------------------------------------------------
+" TODO:		«missing features»
+"=============================================================================
 
 "===========================================================================
 " Macros
@@ -17,7 +14,7 @@
 " Planned to be used through buffoptions2.vim ; *MUST* be in unix
 " fileformat on order to correctly be prossessed by buffoptions2.vim
 "
-function! VS_add2help(msg, help_var)
+function! VS_add2help(msg, help_var) " {{{
   if (!exists(a:help_var))
     exe 'let ' . a:help_var . '   = a:msg'
     exe 'let ' . a:help_var . 'NB = 0'
@@ -26,9 +23,9 @@ function! VS_add2help(msg, help_var)
   endif
   ""let g:vsgui_help_maxNB = g:vsgui_help_maxNB+1
   exe 'let ' . a:help_var . 'NB = ' . a:help_var . 'NB + 1 '
-endfunction
+endfunction " }}}
 
-if !exists(":VSAHM")
+if !exists(":VSAHM") " {{{
   command! -nargs=1 VSAHM call VS_add2help(<args>,"g:vsgui_help")
   VSAHM  "@| <cr>, <double-click> : Replace with current word"
   VSAHM  "@| <A>                  : Replace every occurrence of the misspelled word "
@@ -48,30 +45,29 @@ if !exists(":VSAHM")
   command! -nargs=1 VSAHM call VS_add2help(<args>,"g:vsgui_short_help")
   VSAHM  "@| h                    : Display the help"
   VSAHM  "@+-----------------------------------------------------------------------------"
-endif
+endif " }}}
 
-function! VS_g_help()
+function! VS_g_help() " {{{
   if g:VS_display_long_help	| return g:vsgui_help
   else				| return g:vsgui_short_help
   endif
-endfunction
+endfunction " }}}
 
-function! VS_g_help_NbL()
+function! VS_g_help_NbL() " {{{
   " return 1 + nb lignes of BuildHelp
   if g:VS_display_long_help	| return 1 + g:vsgui_helpNB
   else				| return 1 + g:vsgui_short_helpNB
   endif
-endfunction
+endfunction " }}}
 
-let g:VS_display_long_help = 0
-function! VS_toggle_gui_help()
+function! VS_toggle_gui_help() " {{{
   let g:VS_display_long_help = 1 - g:VS_display_long_help
   Silent call VS_g_Make(b:word)
-endfunction
+endfunction " }}}
 
 " ======================================================================
 if version < 600
-  function! VS_g_AltMaps()
+  function! VS_g_AltMaps() " {{{
     noremap <cr>		:call SA_return(line('.'))<cr>
     noremap <2-LeftMouse>	:call SA_return(line('.'))<cr>
     noremap A			:call SA_all(line('.'))<cr>
@@ -109,10 +105,9 @@ if version < 600
     nnoremap 7			:VSChooseWord 7
     nnoremap 8			:VSChooseWord 8
     nnoremap 9			:VSChooseWord 9
-  endfunction
+  endfunction " }}}
 
-  " Otherwise ...
-  function! VS_g_AltUnMaps()
+  function! VS_g_AltUnMaps() " {{{
     unmap <cr>
     unmap <2-LeftMouse>
     unmap A
@@ -137,29 +132,28 @@ if version < 600
     unmap 7
     unmap 8
     unmap 9
-  endfunction
-"
+  endfunction " }}}
 " ----------------------------------------------------------------------
 else
-  function! VS_g_AltMaps_v6()
-    noremap <buffer> <cr>		:silent :call SA_return(line('.'))<cr>
-    noremap <buffer> <2-LeftMouse>	:silent :call SA_return(line('.'))<cr>
-    noremap <buffer> A			:silent :call SA_all(line('.'))<cr>
-    noremap <buffer> B			:silent :call SA_all_buffers(line('.'))<cr>
-    noremap <buffer> *			:silent :call VS_g_AddWord(0)<cr>
-    noremap <buffer> &			:silent :call VS_g_AddWord(1)<cr>
-    noremap <buffer> i			:silent :call VS_g_IgnoreWord()<cr>
-    noremap <buffer> <esc>		:silent :call SA_return(-1)<cr>
+  function! VS_g_AltMaps_v6() " {{{
+    noremap <buffer> <cr>		:silent! :call SA_return(line('.'))<cr>
+    noremap <buffer> <2-LeftMouse>	:silent! :call SA_return(line('.'))<cr>
+    noremap <buffer> A			:silent! :call SA_all(line('.'))<cr>
+    noremap <buffer> B			:silent! :call SA_all_buffers(line('.'))<cr>
+    noremap <buffer> *			:silent! :call VS_g_AddWord(0)<cr>
+    noremap <buffer> &			:silent! :call VS_g_AddWord(1)<cr>
+    noremap <buffer> i			:silent! :call VS_g_IgnoreWord()<cr>
+    noremap <buffer> <esc>		:silent! :call SA_return(-1)<cr>
 
-    noremap <buffer> <s-tab>		:silent :call VS_g_NextChoice(0)<cr>
-    noremap <buffer> <tab>		:silent :call VS_g_NextChoice(1)<cr>
+    noremap <buffer> <s-tab>		:silent! :call VS_g_NextChoice(0)<cr>
+    noremap <buffer> <tab>		:silent! :call VS_g_NextChoice(1)<cr>
 
-    noremap <buffer> <M-n>		:silent :call VS_g_NextError()<cr>
-    noremap <buffer> <M-p>		:silent :call VS_g_PrevError()<cr>
+    noremap <buffer> <M-n>		:silent! :call VS_g_NextError()<cr>
+    noremap <buffer> <M-p>		:silent! :call VS_g_PrevError()<cr>
 
-    noremap <buffer> u			:silent :call VS_g_UndoCorrection(1)<cr>
-    noremap <buffer> <c-r>		:silent :call VS_g_UndoCorrection(0)<cr>
-        map <buffer> <M-s>E		:silent normal ¡VS_exit!<cr>
+    noremap <buffer> u			:silent! :call VS_g_UndoCorrection(1)<cr>
+    noremap <buffer> <c-r>		:silent! :call VS_g_UndoCorrection(0)<cr>
+        map <buffer> <M-s>E		:silent! normal ¡VS_exit!<cr>
     silent noremap <buffer> h		:call VS_toggle_gui_help()<cr>
 
     amenu 55.200 Spell\ &check.---------------			<c-l>
@@ -181,6 +175,8 @@ else
     nnoremap <buffer> 7			:VSChooseWord 7
     nnoremap <buffer> 8			:VSChooseWord 8
     nnoremap <buffer> 9			:VSChooseWord 9
-  endfunction
-"
+  endfunction " }}}
 endif
+" Part:		lhVimSpell/mappings for the corrector buffer }}}
+"$------------------------------------------------------------------------
+"$ vim600: set fdm=marker:

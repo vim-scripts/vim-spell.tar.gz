@@ -1,6 +1,15 @@
 ChangeLog File for Vim-Spell
 ----------------------------
 
+Ver 0.3: 03rd jul 2002
+* First functional release of a non developper version
+* Options more accessible
+* Added g:VS_goto_next_error_after to jump to the next misspelling after a
+  correction / ignore [idea from Matthias Veit plugin]
+* Take advantage of $LANG in order to determine the default value for
+  g:VS_language
+* Help file updated
+
 Ver 0.2d: 27th feb 2002 
 * The file is automatically saved before the parsing.
 * Help file updated
