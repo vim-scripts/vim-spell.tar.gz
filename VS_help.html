@@ -1,0 +1,544 @@
+<HTML>
+<HEAD><TITLE>Vim-Spell documentation</TITLE></HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Vim-Spell documentation</H1>
+<A NAME="top"></A>
+<HR>
+<PRE>
+# <A HREF="#VIM">VIM</A>: let <A HREF="#g:VS_language">g:VS_language</A> = 'american' 
+
+*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 27th jan 2002
+
+		<A HREF="#VIM">VIM</A> Spell Plugin MANUAL	by Luc Hermitte
+			VIM-Spell version 0.2
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="Presentation"></A><B>Presentation</B>*
+<B><FONT COLOR="PURPLE">Presentation: </FONT></B>
+
+VIM-Spell is a spell checker plugin for <A HREF="#VIM">VIM</A>. Actually it wraps external tools
+that use the |<A HREF="#IA-spell">IA-spell</A>| pipe protocol.
+
+<B><FONT COLOR="PURPLE">Contents </FONT></B>
+|<A HREF="#Features">Features</A>|	The features of the VIM-Spell Plugin.
+|<A HREF="#Install">Install</A>|	Installation notes.
+|<A HREF="#Options">Options</A>|	Options to customize it.
+|<A HREF="#Future">Future</A>|	<A HREF="#Known">Known</A> <A HREF="#problems">problems</A> &amp; <A HREF="#TODO">TODO</A> list.
+|<A HREF="#References">References</A>|	References to related programs and plugins.
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="Features"></A><B>Features</B>*
+<B><FONT COLOR="PURPLE">Plugin features:</FONT></B>
+
+As its name suggests, the main feature of this plugin is to add spell-checking
+functionalities to <A HREF="#VIM">VIM</A>. 
+
+VIM-Spell defines two operating modes ; each one being associate to a buffer.
+The first mode is associated to the buffer of the text spell-checked. The
+second one is a view that suggests alternatives to a misspelling. See for
+instance :
+	<A HREF="http://hermitte.free.fr/vim/ressources/VS-capture.gif">http://hermitte.free.fr/vim/ressources/VS-capture.gif</A>
+
+
+
+  							*<A NAME="main-buffer-mode"></A><B>main-buffer-mode</B>*
+<B><FONT COLOR="PURPLE">  Main-buffer Mode:</FONT></B>
+    From this mode we can :
+      &#42; |<A HREF="#Parse">Parse</A>| the buffer for misspellings,
+      &#42; |<A HREF="#Highlight">Highlight</A>| the misspellings,
+      &#42; |<A HREF="#Jump">Jump</A>| from one misspelling to the next/previous,
+      &#42; |<A HREF="#Exit">Exit</A>|,
+      &#42; |<A HREF="#Swap">Swap</A>| the value of the current language,
+      &#42; Ask for |<A HREF="#Alternatives">Alternatives</A>|.
+
+
+  							*<A NAME="corrector-mode"></A><B>corrector-mode</B>*
+<B><FONT COLOR="PURPLE">  Corrector Mode: </FONT></B>
+    In this mode, a set of alternatives are suggested to replace the word
+    which is under the cursor in the parsed buffer. From this list, we can : 
+      &#42; |<A HREF="#Choose">Choose</A>| an alternative,
+      &#42; |<A HREF="#Correct">Correct</A>| the misspelled word and replace it by the chosen alternative,
+      &#42; |<A HREF="#Replace-all">Replace-all</A>| Replace every occurrence of the misspelled word by the
+	chosen alternative,
+      &#42; |<A HREF="#Replace-buf">Replace-buf</A>| Replace every occurrence of the misspelled word in every
+	opened buffer by the chosen alternative,
+      &#42; |<A HREF="#Ignore">Ignore</A>| the fact that the word is misspelled,
+      &#42; |<A HREF="#Add">Add</A>| the word to the personal dictionary,
+      &#42; |<A HREF="#Undo/redo">Undo/redo</A>| the last action,
+      &#42; |<A HREF="#Jump">Jump</A>| from one misspellings to the next/previous.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+<B><FONT COLOR="PURPLE">Details about the features:</FONT></B>
+  
+
+*<A NAME="Parse"></A><B>Parse</B>*		<A HREF="#Parse">Parse</A> the buffer for misspellings -- key binding (KB) : &lt;M-s&gt;r
+  Main mode.
+
+  This action issues two calls to |<A HREF="#IA-spell">IA-spell</A>|. It first updates the list of
+  misspelled words within the edited document, and then |<A HREF="#cache">cache</A>| their
+  possible alternatives. It also |Highlight|s the misspellings.
+  Note: The current buffer must have been saved before calling |<A HREF="#IA-spell">IA-spell</A>|.
+  This must be done at least once before using the other features of this
+  plugin. 
+
+
+
+*<A NAME="Highlight"></A><B>Highlight</B>*	<A HREF="#Highlight">Highlight</A> the misspellings -- &lt;M-s&gt;s ; not yet automatic
+  Main mode.
+
+  Switches in the Error-Syntax style all the misspelled words.
+
+
+
+*<A NAME="Jump"></A><B>Jump</B>*		<A HREF="#Jump">Jump</A> from one misspelling to the next/previous -- &lt;M-n&gt;, &lt;M-p&gt;
+  Both modes.
+
+  Puts the cursor under the the next/previous misspelling.
+  In <A HREF="#corrector-mode">corrector-mode</A>, it also actuates the alternatives proposed to match the
+  new current misspelling.
+
+
+
+*<A NAME="Exit"></A><B>Exit</B>*		<A HREF="#Exit">Exit</A> -- &lt;M-s&gt;E
+  Both modes.
+
+  Closes the corrector window (if opened) and un-highlight the misspellings.
+
+
+
+*<A NAME="Swap"></A><B>Swap</B>*		<A HREF="#Swap">Swap</A> the value of the current language -- &lt;M-s&gt;L
+  Main mode.
+
+  Changes the value of the option |<A HREF="#g:VS_language">g:VS_language</A>| in order to be turn after
+  turn : &quot;American&quot; or &quot;French&quot;. You will certainly want to change this, do it
+  within VS_map.vim. BTW, this mapping requires you have installed my
+  |<A HREF="#triggering">triggering</A>| plugin.
+
+
+*<A NAME="Alternatives"></A><B>Alternatives</B>*  Ask for alternatives -- &lt;M-s&gt;a
+  Main mode.
+
+  Opens (if not) the corrector window and suggests alternatives to the current
+  word (i.e. under the cursor) if misspelled.
+  This switches to the corrector mode.
+
+
+   - - - - - - - - - -
+
+*<A NAME="Choose"></A><B>Choose</B>*      <A HREF="#Choose">Choose</A> an alternative -- cursors, &lt;tab&gt;, &lt;s-tab&gt;
+  Corrector mode
+
+  An alternative is considered chosen if the cursor (in the corrector window)
+  is on the line of the alternative.
+  &lt;tab&gt; and &lt;s-tab&gt; have also been mapped to jump from one alternative to the
+  next/previous.
+
+
+
+*<A NAME="Correct"></A><B>Correct</B>*	<A HREF="#Correct">Correct</A> the misspelled word -- &lt;cr&gt;, &lt;2-click&gt;, number
+  Corrector mode :: correction
+
+  The current misspelled word is replaced by the chosen alternative.
+
+  The alternative can also be chosen by directly typing its number.
+
+  If the current word within the main buffer differs from the misspelling
+  considered within the corrector-buffer, nothing is done.
+
+      
+
+*<A NAME="Replace-all"></A><B>Replace-all</B>*	Replace every occurrence of the misspelled word -- A
+  Corrector mode :: correction
+
+  Every occurrence, in the main buffer, of the misspelling is replaced by the
+  chosen alternative.
+
+
+
+*<A NAME="Replace-buf"></A><B>Replace-buf</B>*	Replace every occurrence of the misspelling in every buffer -- B
+  Corrector mode :: correction
+
+  Every occurrence, in every opened buffer, of the misspelling is replaced by
+  the chosen alternative.
+
+
+
+*<A NAME="Ignore"></A><B>Ignore</B>*	<A HREF="#Ignore">Ignore</A> the fact that the word is misspelled -- i
+  Corrector mode :: dictionary management
+
+  This is a temporary measure. The word is once again highlighted when
+  |<A HREF="#Highlight">Highlight</A>| is required.
+
+
+
+*<A NAME="Add"></A><B>Add</B>*		<A HREF="#Add">Add</A> the word to the personal dictionary -- &#42; or &amp; 
+  Corrector mode :: dictionary management
+
+  The word is added to the personal dictionary dependent of the current
+  language. Typing '&amp;' adds the word in lower case.
+
+  This issues a call to |<A HREF="#IA-spell">IA-spell</A>|.
+
+  When using |<A HREF="#Aspell">Aspell</A>|, if the word to add is accentuated (or contains non
+  alphanumeric characters), this function will propose to directly insert the
+  word into the dictionary as if |<A HREF="#g:VS_aspell_add_directly_to_dict">g:VS_aspell_add_directly_to_dict</A>| was set to
+  true. Hence, all the corresponding warnings apply.
+  This way of proceding comes from the fact I wasn't able to add accentuated
+  words to the personal dictionary through the pipe protocol with <A HREF="#Aspell">Aspell</A> .33.5
+  alpha compiled with MinGW and used under Windows NT. Any hint/comment on
+  this point is welcome.
+
+  Deleting a word from the dictionary is out of topic here but quite easy
+  indeed with <A HREF="#Aspell">Aspell</A>. I have identified for instance with the version .33.5
+  alpha the files fr.pws (for French) and english.pws. Deleting the line of
+  the word no longer desired and reducing the last number on the first line
+  should do the trick.
+  
+
+
+*<A NAME="Undo/redo"></A><B>Undo/redo</B>*	<A HREF="#Undo/redo">Undo/redo</A> the last action -- u / &lt;C-R&gt;
+  Corrector mode :: dictionary management
+
+  <A HREF="#Undo/redo">Undo/redo</A> the last action that has occurred in the main buffer. This is
+  helpful to undo a change without (because we haven't click on the right line
+  for instance) leaving the corrector window.
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+<B><FONT COLOR="PURPLE">  Internal considerations</FONT></B>
+
+							*<A NAME="cache"></A><B>cache</B>*
+As the calls to <A HREF="#Aspell">Aspell</A> are quite slow -- due to the need to load the
+dictionary each time it is run --, I decided to <A HREF="#cache">cache</A> all the calls to <A HREF="#Aspell">Aspell</A>.
+
+Though, a file named ./.spell/errors-list is maintained for every folder
+containing files checked with this plugin. Every time a file is parsed, all
+the new misspellings detected are added (at the end of the file) with the list
+of their suggested alternatives.
+
+Hence, all in all |<A HREF="#IA-spell">IA-spell</A>| is called only twice : a first time to detect new
+misspellings, and a second one to retrieve the suggested alternatives of all
+the new misspellings. Once the file is parsed, the improvement is noticeable :
+looking for the alternatives of a misspelling is an instantaneous operation.
+
+All the current misspellings are remembered. It may not be useful in the long
+run except for recurrent misspellings. But, the replacing feature will make
+this behavior useless and hence we will be able to delete the cache-file
+between two sessions.  cf. |<A HREF="#todo-replace">todo-replace</A>|
+
+Regarding the highlighting policy, every word is considered OK except those
+detected misspelled by the |<A HREF="#IA-spell">IA-spell</A>| tool. This is the opposite approach of
+the one taken in |<A HREF="#engspchk">engspchk</A>|. If the cached file is localized (to folder) and
+often erased, this will enable to manage smaller lists of words.
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="Install"></A><B>Install</B>*
+<B><FONT COLOR="PURPLE">Installation notes: </FONT></B>
+
+<B><FONT COLOR="PURPLE">  Files of the plugin: </FONT></B>
+    The plugin is composed of 6 files plus this file and its HTML version :
+      - VS-all.vim	: the file to be sourced, it sources the others ;
+      - VS_fm-fun.vim	: file management functions ;
+      - VS_gui.vim	: functions relatives to the corrector GUI ;
+      - VS_int-fun.vim	: internal function wrapping the calls to |<A HREF="#IA-spell">IA-spell</A>| ;
+      - VS_map.vim	: mappings defined in the main buffer ;
+      - VS_gui-map.vim	: mappings defined in the corrector buffer. 
+
+    They could be downloaded as a tarball archive at :
+	<A HREF="http://hermitte.free.fr/vim/ressources/vim-spell.tar.gz">http://hermitte.free.fr/vim/ressources/vim-spell.tar.gz</A>
+
+    I think that the best thing to do is to extract them in a dedicated folder
+    with for instance : gzip -cd VS.tar.gz &#124; tar xf -
+    Personnaly, I extract it within $VIM/macros/ which creates a new folder.
+    I choose not to put it in my plugins folder, and source VS-all.vim only
+    with specific filetypes (like tex and html,php,...) thanks to their
+    respective ftplugins.
+
+    Note by the way that you will also require the |<A HREF="#alternate">alternate</A>| plugin and my
+    |<A HREF="#help">help</A>| plugin in order to use VIM-Spell. They are in $VIM/plugin/ on my
+    systems.
+
+<B><FONT COLOR="PURPLE">  VIM 5.xx</FONT></B>
+    The <A HREF="#VIM">VIM</A> version I use is the 5.7. Hence all the features from this plugin
+    do work fine under these old releases.
+    But. There is a 'but'. The mappings for the corrector-buffer imply they
+    are unloaded out of the buffer. Indeed, I remap things like &lt;cr&gt;, a, i,
+    &lt;tab&gt;, 0, 1, ..., 9, and so on. I wouldn't have done so if there didn't
+    exist a way to implement buffer-relative mappings with these old versions
+    of <A HREF="#VIM">VIM</A>. So, to make it straight, download |<A HREF="#buffoption">buffoption</A>| and copy it
+    into your $VIMRUNTIME/macros folder. I also suggest you take a look on a
+    my page about &quot;File-type plugin emulation on <A HREF="#VIM">VIM</A> 5.xx&quot; for more
+    explanations.
+	<A HREF="http://hermitte.free.fr/vim-beta/ftplugin.php3">http://hermitte.free.fr/vim-beta/ftplugin.php3</A> : still, but will move to
+	<A HREF="http://hermitte.free.fr/vim/ftplugin.php3">http://hermitte.free.fr/vim/ftplugin.php3</A>
+
+<B><FONT COLOR="PURPLE">  VIM 6.0</FONT></B>
+    As I have just said, the &quot;maps local to a buffer&quot; mechanism is required by
+    VIM-Spell to work correctly. It is directly supported under <A HREF="#VIM">VIM</A> 6.0,
+    without any other plugin required. Hence, as |<A HREF="#buffoption">buffoption</A>| is not used,
+    menus are no longer local to buffers.
+
+
+<B><FONT COLOR="PURPLE">  Customizing the mappings:</FONT></B>
+    I decided to bind all the features to sequences beginning by &lt;M-s&gt; because:
+      - 's' is like spell ;
+      - &lt;C-S&gt; is already mapped (in my configuration) to :w&lt;cr&gt; for when I
+	come back from Ms-Windows products that I used over a long period ;
+      - 'ó' is not a letter I use in French, Ms-Windows Spanish users may
+	want to change it ; note: you will (quite) never see my mappings
+	starting with &lt;M-i&gt; : 'é' probably the accentuated letter the most
+	used in French.
+    BTW, notice that &lt;M-s&gt; and &lt;M-S&gt; are two different key strokes.
+
+    So, if you want to change the default mappings, just edit the files with
+    &quot;map&quot; within -- e.g. gvim VS_*map.vim -- and make your customizations.
+
+<B><FONT COLOR="PURPLE">  Last thing:</FONT></B>
+    I'm aware that this plugin is quite complex. It is the price for all its
+    features. It depends on external plugins and even external (but common for
+    <A HREF="#VIM">VIM</A> users I guess) tools. For maintenance aspects, it is composed on
+    several inter-dependant files. And for compatibility reasons, I've chosen
+    to use as few new <A HREF="#VIM">VIM</A> 6.0 features as possible.
+
+    Regarding my choices of folders between $VIM and $VIMRUNTIME, they are
+    guided from the fact I've installed <A HREF="#VIM">VIM</A> 5.7 and <A HREF="#VIM">VIM</A> 6.0 on my Windows NT
+    system.  All the common and compatible (ft)plugins are in $VIM/(ft)plugin
+    while specific stuff is in the respective $VIMRUNTIME folders. If your
+    installation is simple, I suggest you use $VIMRUNTIME everywhere.
+    Sometimes, I will write a note about this cohabitation topic.
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="Options"></A><B>Options</B>*
+<B><FONT COLOR="PURPLE">Options: </FONT></B>
+
+The options are global. Making them buffer relative caused me a lot of
+troubles when I wanted to |<A HREF="#Parse">Parse</A>| several buffers.
+
+
+*<A NAME="g:VS_language"></A><B>g:VS_language</B>*	string (...)
+  This option defines the language/dictionary used. cf. the --master option of
+  |<A HREF="#IA-spell">IA-spell</A>|.
+
+  BTW, you may want to customize the |<A HREF="#Swap">Swap</A>| languages.
+
+
+*<A NAME="g:VS_spell_prog"></A><B>g:VS_spell_prog</B>* string ('ispell'/'aspell')
+  This option must be used to set which |<A HREF="#IA-spell">IA-spell</A>| tool is used : <A HREF="#Ispell">Ispell</A> or
+  <A HREF="#Aspell">Aspell</A> -- or any upcoming clone.
+
+
+*<A NAME="g:VS_strip_accents"></A><B>g:VS_strip_accents</B>* boolean (0/1)
+  Directly passed to |<A HREF="#IA-spell">IA-spell</A>| if defined.
+
+
+*<A NAME="g:VS_aspell_add_directly_to_dict"></A><B>g:VS_aspell_add_directly_to_dict</B>* boolean (0/1)
+  This trick enable to quicken the insertion of words into the personal
+  dictionary. I guess it will only work with |<A HREF="#Aspell">Aspell</A>|. I've tested this
+  approach with <A HREF="#Aspell">Aspell</A> .33.5 alpha ; I can't guarantee that it always work
+  with future versions of <A HREF="#Aspell">Aspell</A>. By default, this option is set to false (ie.
+  0).
+  If you want to use it, please check :
+  - You are using <A HREF="#Aspell">Aspell</A> or at least the format of your personal dictionary
+    looks like : &quot;xxxx &lt;number_of_entries&gt;&quot; on the first line, while the
+    following lines are made of «personal» words.
+  - The personal dictionary names are correctly set within VS_personal_dict()
+    regarding your |<A HREF="#g:VS_language">g:VS_language</A>|.
+  - $ASPELL points to the folder where your personal dictionaries are stored.
+    I think that the name of this env. variable is very badly chosen.
+  Any feedback is welcome regarding this option (and the rest as well) :
+  format of personal dictionaries and its everlastingness, their names
+  regarding the language used, etc.
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="Future"></A><B>Future</B>*
+<B><FONT COLOR="PURPLE">Known problems &amp; TODO List: </FONT></B>
+
+
+							*<A NAME="Known"></A><B>Known</B>* *<A NAME="problems"></A><B>problems</B>*
+<B><FONT COLOR="PURPLE">  Known problems:</FONT></B>
+    Setting the file-type will cancel the highlighting of misspellings ; So,
+    try to avoid to reset it every time the buffer is reloaded -- this could
+    be observed with the affectation of &amp;filetype within modelines like with
+    this file.  
+
+    The current |<A HREF="#Ignore">Ignore</A>| feature lasts until the next call to VS_show_errors()
+    hence until a |<A HREF="#Highlight">Highlight</A>| of misspellings, a |<A HREF="#Parse">Parse</A>|, etc.
+
+    When we hit '*' in the Corrector mode, a space must be hit in order to
+    activate the associated mapping.
+
+  
+
+							*<A NAME="TODO"></A><B>TODO</B>*
+<B><FONT COLOR="PURPLE">  TODO list:</FONT></B>
+
+    &#42; Manage replacement list ;				*<A NAME="todo-replace"></A><B>todo-replace</B>*
+      i.e. list of words to be systematically replaced by a predefined word.
+      <A HREF="#Aspell">Aspell</A> seems to use *.prepl files for this purpose. But how to manage
+      them through pipes (-a option) ?
+      Two possible ways (option ?) to execute the replacements:
+      - can be executed on user's request
+      - can be executed automatically =&gt; map every characters -- possibility
+	to study ; cf. Word_in_ment() in fr-abbrs.vim
+    &#42; <A HREF="#Ignore">Ignore</A> some contextual word like &quot;\oe uvre&quot; -- with TeX
+      and other expressions like for instance the labels of figure the
+      parameters to \rnode{}{}{}, and so on.
+    &#42; Locally and permanently <A HREF="#Ignore">Ignore</A> words ; e.g. Luc &amp; Hermitte can be
+      ignored safely in a document, but are not wanted in the dictionary.
+    &#42; Cache the dictionary management requests ; delay and merge the calls to
+      |<A HREF="#IA-spell">IA-spell</A>| that add words to the dictionary as long as possible.
+    &#42; Secondary dictionary.
+    &#42; Delete words from the dictionary ; <A HREF="#Aspell">Aspell</A> does not seem to permit it
+      through a piped call, while it is quite easy to perform. But is it safe
+      in regard of its future versions ? Will be supported if the option
+      |<A HREF="#g:VS_aspell_add_directly_to_dict">g:VS_aspell_add_directly_to_dict</A>| is set to true.
+    &#42; <A HREF="#Add">Add</A> the possibility to retract/expand the help for the Corrector-Mode.
+    &#42; Dedicate a sub-menu for the different options.
+
+    &#42; Extension to other file types : extend the file-type2mode recognition
+      function ; only TeX, ML-like and None/url are recognized for now.
+      Actually, I do support only the formats supported by <A HREF="#Aspell">Aspell</A>.
+    &#42; Wrap other functions exclusives to <A HREF="#Aspell">Aspell</A> (e.g. sounds-like words and
+      lists of words, phonemes, score between words)
+    &#42; <A HREF="#Add">Add</A> <A HREF="#g:VS_language">g:VS_language</A> to the names of cached files.
+    &#42; Being able to ask for alternatives on the fly ; i.e. not only for
+      cached misspellings.
+
+    &#42; Better handling of the splitted window for a more ergonomic plugin.
+    &#42; Option for vertical splitting of window with vim6 ; could be nicest.
+    &#42; Option for displaying suggested alternatives in a popup-menu ; why not.
+    &#42; Delete unneeded code
+    &#42; Silent execution under <A HREF="#VIM">VIM</A> 6 to be improved
+    &#42; <A HREF="#VIM">VIM</A> 6 local menus ; works fine with <A HREF="#VIM">VIM</A> 5.7 + buffoption.vim
+
+
+------------------------------------------------------------------------------
+
+								*<A NAME="References"></A><B>References</B>*
+<B><FONT COLOR="PURPLE">References:</FONT></B>
+
+<B><FONT COLOR="PURPLE">  Links to external programs </FONT></B>
+
+
+    The <A HREF="#VIM">VIM</A> editor					*<A NAME="VIM"></A><B>VIM</B>*
+     Do I really need to present you this wonderful text editor ?
+     Just in case, the plugin presented here has been written for <A HREF="#VIM">VIM</A> --
+	<A HREF="http://vim.sourceforge.net/">http://vim.sourceforge.net/</A>
+    
+
+    [IA]spell						*<A NAME="IA-spell"></A><B>IA-spell</B>*
+     I use [IA]spell to refer to either |<A HREF="#Ispell">Ispell</A>| or |<A HREF="#Aspell">Aspell</A>|. Indeed, these
+     tools accept a same and important set of parameters. Therefore, this
+     plugin rely on this common set and can be used with either spell-checker
+     ; see |<A HREF="#g:VS_spell_prog">g:VS_spell_prog</A>|. Of course one or the other is needed by the
+     plugin.
+    
+
+    <A HREF="#Ispell">Ispell</A>						*<A NAME="Ispell"></A><B>Ispell</B>*
+     <A HREF="#Ispell">Ispell</A> is the widely distributed spell-checker I use as reference for
+     this plugin. 
+     <A HREF="#Ispell">Ispell</A> hasn't been tested but should be OK with this plugin.
+	<A HREF="http://fmg-www.cs.ucla.edu/geoff/ispell.html">http://fmg-www.cs.ucla.edu/geoff/ispell.html</A>
+    
+
+    <A HREF="#Aspell">Aspell</A>						*<A NAME="Aspell"></A><B>Aspell</B>*
+     &quot;<A HREF="#Aspell">Aspell</A> is an Open Source spell checker designed to eventually replace
+     <A HREF="#Ispell">Ispell</A>.  Its main feature is that it does a much better job of coming up
+     with possible suggestions than <A HREF="#Ispell">Ispell</A> does. In fact recent tests shows
+     that it even does better than Microsoft Word 97's spell checker in some
+     cases.&quot;
+    				 © Kevin Atkinson, from Aspell's introduction.
+     It takes into account the sonority of words.
+	<A HREF="http://aspell.sourceforge.net/">http://aspell.sourceforge.net/</A>
+    
+
+    Text tools						*<A NAME="cat"></A><B>cat</B>* *<A NAME="echo"></A><B>echo</B>*
+     The text tools and more precisely <A HREF="#cat">cat</A> is required on your system. Make
+     sure it is accessible from your ${PATH}.
+     Rem.: I use |<A HREF="#cat">cat</A>| instead of |<A HREF="#echo">echo</A>| because |<A HREF="#echo">echo</A>| looses accents and
+     cuts word when they occur on my Windows NT system.
+    
+<B><FONT COLOR="PURPLE">  Dependencies </FONT></B>
+    This plugin rely on some other plugins like :
+    
+
+    a.vim						*<A NAME="alternate"></A><B>alternate</B>*
+     Defines some functions to go to specific windows/buffers.
+     Critical.
+	<A HREF="http://vim.sf.net/scripts/script.php?script_id=31">http://vim.sf.net/scripts/script.php?script_id=31</A>
+    
+
+    help.vim						*<A NAME="help"></A><B>help</B>*
+     Very little plugin of my own that I use to define help strings.
+     Not rely critical.
+	<A HREF="http://hermitte.free.fr/vim/ressources/help.vim">http://hermitte.free.fr/vim/ressources/help.vim</A>
+
+
+    Triggers.vim					*<A NAME="triggering"></A><B>triggering</B>*
+     Big piece of script. It permits to execute one action or an other on a
+     trigger. 
+     Used to swap languages.
+	<A HREF="http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim">http://hermitte.free.fr/vim-beta/general.php3#Triggers_vim</A>
+    
+
+    buffoption.vim					*<A NAME="buffoption"></A><B>buffoption</B>*
+     This file is used to define buffer relative mappings with versions of <A HREF="#VIM">VIM</A>
+     prior to the 6 series -- critical in that case. As, I write my mappings
+     as &quot;noremap&quot;s, you should retrieve my patch from
+	<A HREF="http://hermitte.free.fr/vim-beta/ftplugin.php3#buffoptions2_vim">http://hermitte.free.fr/vim-beta/ftplugin.php3#buffoptions2_vim</A> you
+     will also need : buffoptions_map2.vim and fileuptodate.vim. 
+     With the <A HREF="#VIM">VIM</A> 6 series, this file is no more required.
+    
+  
+<B><FONT COLOR="PURPLE">  Other related VIM's plugins </FONT></B>
+   
+
+    Claudio Fleiner's vimspell.vim. 			*<A NAME="vimspell"></A><B>vimspell</B>*
+     This plugins is the one that inspired me at first.  It generates the list
+     of misspelled words through a call to |<A HREF="#IA-spell">IA-spell</A>|, then highlights them in
+     the Error syntax style. It permits to : - jump from a misspelled word to
+     the next one, - add them to the |IA-spell|'s dictionary, - ignore them, 
+     - and see a list of alternative words.
+	<A HREF="http://www.fleiner.com/vim/spell.html">http://www.fleiner.com/vim/spell.html</A>
+    
+
+    Dr. Charles E. Campbell, Jr.'s engspchk.vim.	*<A NAME="engspchk"></A><B>engspchk</B>*
+     A really big piece of plugin! It needs no external tool. The dictionary
+     is part of the plugin ; hence, it has to be extended and ported to other
+     languages. It highlights misspelled words, enables to jump from one to
+     another, and manages the dictionary. With <A HREF="#VIM">VIM</A> v6.0+, it can compute
+     alternative words.
+     I've stolen my jumping functions, and TeX highlighting rules from this
+     plugin.  
+	<A HREF="http://www.erols.com/astronaut/vim/index.html#Spelling">http://www.erols.com/astronaut/vim/index.html#Spelling</A>
+
+
+    Matthias Veit's spellcheck.vim for <A HREF="#VIM">VIM</A> 6 (only ?)	*<A NAME="spellcheck"></A><B>spellcheck</B>*
+     Late addition to sourceforge. Require <A HREF="#Aspell">Aspell</A> and ruby =&gt; I haven't tested
+     it.  It seems that I permit much more things.
+	<A HREF="http://vim.sf.net/scripts/script.php?script_id=131">http://vim.sf.net/scripts/script.php?script_id=131</A>
+
+
+    Johannes Zellner's Aspell.vim for <A HREF="#VIM">VIM</A> 6.0		*<A NAME="JZ"></A><B>JZ</B>*
+     Another spellchecking plugin wrapping <A HREF="#Aspell">Aspell</A>.
+     &lt;htpp://www.zellner.org/vim/autoload/Aspell.vim&gt;
+
+
+------------------------------------------------------------------------------
+ © Luc Hermitte, 2001-2002	<A HREF="http://hermitte.free.fr/vim">http://hermitte.free.fr/vim</A>
+<A HREF="#top">top</A>
+</PRE>
+</BODY>
+
+
+</HTML>

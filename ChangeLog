@@ -1,0 +1,68 @@
+ChangeLog File for Vim-Spell
+---------------------------
+
+Ver O.2: 27th jan 2002 
+* Slowly converted to verion 6.0 of VIM :
+  - The use of buffoption 2 is no more required with VIM 6.
+    With VIM 5.xx, there is no way around.
+    Unfortunately, using VIM 6.0 does not permit to have bufferized menus --
+    ie. menus associated to a buffer.
+  - The mappings are all silent under VIM 6.0
+  - In order to let this plugin usable from VIM 5.x and VIM 6, none of the
+    other improvments from the 6th version will be used (s:, <Plug>, <unique>,
+    <SID>, etc.)
+  -> <VS_*map*.vim>
+* First fix to the insertion of accentuated words
+  As I didn't succeded to add accentuated words to the personal dictionary
+  with aspell (compiled with MinGW, under Windows); I added the possiblity to
+  directly add words within the personal dictionary.
+  -> <VS_int-fun.vim>
+* In the continuation of the previous fix, there a new option :
+  «g:VS_aspell_add_directly_to_dict» that enable to directly modify the
+  personal dictionary without using aspell. This option is to be used with
+  care, I can't guaranty aspell will always use the same format for pers.
+  dict.  neither it works with ispell. This way of proceding is much more
+  quicker than using the pipe protocol.
+  -> <VS_int-fun.vim>
+* Correct the replacement of word :
+  If a key sequence of a mapping is included within the word that will replace
+  the current misspelling, the mapping is no more expanded/executed. Hence,
+  "û" can replace "u" even if "<M-{>" is mapped to something.
+  -> <VS_gui.vim>
+* fix ExitSpell() -- called by <M-s>E
+* Help file updated
+
+
+Ver 0.1e:
+* Perfect syntax matching with LaTeX files:
+  - the LaTeX highlighting is keep,
+  - stuff like \cmd{mizpelling} is highlighted, non keyword characters do not
+    perturb anymore.
+  Remark: The correction has been stolen from Dr. Charles E. Campbell, Jr.'s
+  engspchk.vim plugin. It could/should be extended to other filetypes you may
+  want to correct (html, c++, mail, etc.)
+  -> <VS_fm-fun.vim>
+
+Ver 0.1d: 13th nov 2001
+* Change the jumping functions (VS_SpchkPrev & VS_SpchkNext) to ignore
+  errors that does not correspond to misspellings.
+
+Ver 0.1c:
+* Better syntax matching -> "\cmd{mizpelling}" will be highlighted
+  within LaTeX commands.
+  -> <VS_fm-fun.vim>
+   exe '%s/^[&*#] \(\S\+\).*$/syntax match SpellErrors "\\<\1\\>"'.spell_options
+  becomes
+   exe '%s/^[&*#] \(\S\+\).*$/syntax keyword SpellErrors "\1"'.spell_options
+  +
+   syn region Misspelling start="\k" end="\W*" contains=SpellErrors transparent
+
+  But it is still not perfect :-((
+  "{MiZspell}" will signal the closing curly-bracket to be a TeXError
+    
+Ver 0.1b: 7th nov 2001
+* Add "SGML"-like support: xml, html, php, incl (personal extension I use)
+  -> <VS_int-fun.vim>
+
+Ver 0.1:
+* Initial version

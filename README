@@ -1,0 +1,24 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=135
+
+VIM-Spell is a spell-checker plugin for VIM based on Ispell or Aspell.
+
+This plugin can parse a file and look for misspellings, highlight them, jump from one to another, choose the language, add new words to the dictionary, ignore some, and so on. 
+
+The main feature is probably the split window used to propose alternatives for a misspelling and to correct it. To give an idea, here is a little screenshot :
+    http://hermitte.free.fr/vim/ressources/VS-capture.gif
+
+More over, in order to speed up the processing, the calls to ispell/aspell are regrouped. All the alternatives for every misspelling in the current document are cached in a local file. Then, obtaining the alternatives for a given misspelling is an instantaneous operation.
+
+For more information, you can take a look at the help file archived in the
+tarball or look at :
+    http://hermitte.free.fr/vim/ressources/vimfiles/doc/VS_help.html
+Rem.: the site is quite slow.
+
+The latest version have been tested with VIM 6.1 under a PC/WindowsXP/cmd.exe and PC/WindowsXP/Cygwin-bash.
+
+Changelog available at:
+ http://hermitte.free.fr/vim/ressources/vimfiles/macros/vim-spell/ChangeLog
+BTW, you may find a more up-to-date version of the plugin at:
+ http://hermitte.free.fr/vim/ressources/
+Note: the latest versions are no longer compatible with Vim 5.x.
+
