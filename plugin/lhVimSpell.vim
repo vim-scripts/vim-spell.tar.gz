@@ -2,9 +2,9 @@
 " File:		lhVimSpell.vim {{{
 " Author:	Luc Hermitte <EMAIL:hermitte@free.fr>
 "		<URL:http://hermitte.free.fr/vim>
-" Version:	0.3
+" Version:	0.3b
 " Created:	One day in 2001
-" Last Update:	03rd jul 2002
+" Last Update:	18th jul 2002
 " }}}
 "------------------------------------------------------------------------
 " Description:	Spellcheck plugin for VIM. {{{
@@ -270,7 +270,7 @@ endif
 " Part:		lhVimSpell/corrected buffer functions }}}
 "=============================================================================
 " Part:		lhVimSpell/interface to [ia]spell {{{
-" Last Update:	03rd jul 2002
+" Last Update:	18th jul 2002
 "------------------------------------------------------------------------
 " Description:	Interface functions for Vim-Spell to [ia]spell
 "------------------------------------------------------------------------
@@ -282,7 +282,7 @@ endif
 "===========================================================================
 " Programs calls
 function! VS_i_Call_Spell_type(type,...)
-  if a:type == "tex"                    | let mode = ' --mode='. a:type 
+  if a:type == 'tex'                    | let mode = ' --mode='. a:type 
   elseif a:type =~'htm\|xml\|php\|incl' | let mode = ' --mode=sgml'
   else                                  | let mode = ''
   endif
@@ -332,6 +332,11 @@ function! VS_i_get_alternatives(errors)
   0put = a:errors
   g/^$/d
   w | v//d
+  if 0 == getfsize(tmp) 
+    bd!
+    call delete(tmp)
+    return ''
+  endif
   exe cmd
   " delete empty lines
   g/^$/d
@@ -412,7 +417,7 @@ endfunction
 " Part:		lhVimSpell/interface to [ia]spell }}}
 "=============================================================================
 " Part:		lhVimSpell/files management function {{{
-" Last Update:	03rd jul 2002
+" Last Update:	18th jul 2002
 "------------------------------------------------------------------------
 " Description:	Files Management functions for Vim-Spell to [ia]spell
 "------------------------------------------------------------------------
@@ -441,7 +446,9 @@ function! VS_parse_file(filename) " {{{
   " 2- Check for new errors
     ""let path = substitute(a:filename, '\(.*\)[/\\]\(\\ \|[^/\\]\)*', '\1', '')
     let path = fnamemodify(a:filename,':p:h')
-    call VS_CheckNewErrors(path,lst)
+    if -1 == VS_CheckNewErrors(path,lst)
+      return
+    endif
 
   " 3- Build the Syntax for error and the regex search.
     call VS_show_errors()
@@ -486,7 +493,14 @@ function! VS_show_errors() " {{{
     ""g/^I .*/d
     " Build the SpellErrors syntax "pattern"
     "exe '%s/^[&*#] \(\S\+\).*$/syntax keyword SpellErrors \1'.spell_options
-    exe '%s/^[&*#] \(\S\+\).*$/syntax match SpellErrors "\\<\1\\>"'.spell_options
+    let v:errmsg = ''
+    exe 'silent! %s/^[&*#] \(\S\+\).*$/syntax match SpellErrors "\\<\1\\>"'.spell_options
+    if strlen(v:errmsg)
+      " ie. no misspelling
+      bd!
+      call delete(tmp)
+      return -1
+    endif
     wq
 
     syn case match
@@ -502,11 +516,31 @@ function! VS_show_errors() " {{{
       exe "so ".ilf
     endif
 
+    " Enable the highlighting of misspellings for the current filetype {{{
     "syn cluster Spell contains=Misspelling,SpellCorrected
-    if &ft == "tex"
+    if &ft == 'tex'
       syn cluster texCommentGroup	add=SpellErrors,Normal
       syn cluster texMatchGroup		add=SpellErrors,Normal
+      " Sometimes, we don't want the next group to be searched ...
+      syn cluster texCmdGroup		add=SpellErrors,Normal
+    elseif &ft == 'bib'
+      syn cluster bibVarContents     	contains=SpellErrors,Normal
+      syn cluster bibCommentContents 	contains=SpellErrors,Normal
+    else 
+      " Thanks to Claudio Fleiner's syntax files, we can use the @Spell
+      " cluster to highlight misspellings.
+      " It works for sure with cs, dtml, html, java, and m4 files (w/ vim 6.1)
+      let a_save = @a
+      redir @a
+	Silent! syn list @Spell
+      redir END
+      if -1 != match(@a, 'Spell\s\+cluster=')
+	syn cluster Spell	     	add=SpellErrors,Normal
+	" TODO: else
+      endif
+      let @a = a_save
     endif
+    " }}}
     hi link SpellErrors Error
 
     " cmd line at least 2 ... {{{
@@ -516,6 +550,7 @@ function! VS_show_errors() " {{{
 	set cmdheight=2
       endif
     endif " }}}
+    return 1
 endfunction " }}}
 
 
@@ -583,6 +618,9 @@ function! VS_CheckNewErrors(path,errors)
     endif
   " 1.2- Build their alternatives
     let tmp = VS_f_build_alternatives(new)
+    if !strlen(tmp)
+      return -1
+    endif
   " 1.3- Add them to elf
     call FindOrCreateBuffer(elf,1)	" from a.vim
     exe "$r ".tmp
@@ -595,6 +633,7 @@ function! VS_CheckNewErrors(path,errors)
     " Purge intermediary buffer
     exe "bd ".tmp
     call delete(tmp)
+    return 1
 endfunction
 
 "===========================================================================

@@ -1,8 +1,8 @@
 # VIM: let g:VS_language = 'american' 
-*VS_help.txt*	For Vim version 5.7.+	Last change: 03rd jul 2002
-
+*VS_help.txt*	For Vim version 5.7.+	Last change: 18th jul 2002
+*lhVimSpell*
 		VIM Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.3
+			VIM-Spell version 0.3b
 
 
 ------------------------------------------------------------------------------
@@ -190,6 +190,19 @@ Details about the features:~
   Display or hide a several lines help message that sums up the different
   key-bindings used within the Corrector Mode.
 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  Filetypes supported~
+
+Aspell may not correctly parse every type of file as it is only aware of TeX
+syntax, html/sgml-like syntax and URLs.
+
+However, not every word will be highlighted, but only those that are "tagged"
+to be misspellable. At this time, only TeX, HTML, cs, dtml, m4 and Java files
+will correctly highlight misspellings ; and every other filetype whose VIM
+syntax file (|syn-files|) "exports" the '@Spell' |cluster|. It is accomplished
+by declaring that some appropriated syntax items (typically comments and text
+zones) constain (|syn-contains|) or add the cluster '@Spell'.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   Internal considerations~
@@ -399,6 +412,7 @@ Known problems & TODO List: ~
     * Extension to other file types : extend the file-type2mode recognition
       function ; only TeX, ML-like and None/url are recognized for now.
       Actually, I do support only the formats supported by Aspell.
+    * Permit to toggle the highlighting of misspellings within TeXgroups
     * Wrap other functions exclusives to Aspell (e.g. sounds-like words and
       lists of words, phonemes, score between words)
     * Add g:VS_language to the names of cached files.
@@ -406,6 +420,8 @@ Known problems & TODO List: ~
       cached misspellings.
     * Improve the customization possibilities of the mappings -- some people
       like mappings starting with backslashes.
+    * Remove the possible ambiguities coming from the tags' names of this help
+      file.
 
     * Better handling of the splitted window for a more ergonomic plugin.
     * Option for vertical splitting of window with vim6 ; could be nicest.
@@ -490,6 +506,9 @@ References:~
      the next one, - add them to the |IA-spell|'s dictionary, - ignore them, 
      - and see a list of alternative words.
      <http://www.fleiner.com/vim/spell.html>
+     BTW, it seems that Claudio Fleiner has written most of his syntax files
+     with spellchecking concerns in mind. Thanks to him, having a correct
+     highlighting policy for these types of files is a piece of cake. :-))
     
     Dr. Charles E. Campbell, Jr.'s engspchk.vim.	*engspchk*
      A really big piece of plugin! It needs no external tool. The dictionary

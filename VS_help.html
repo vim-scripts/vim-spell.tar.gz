@@ -7,10 +7,11 @@
 <PRE>
 # <A HREF="#VIM">VIM</A>: let <A HREF="#g:VS_language">g:VS_language</A> = 'american' 
 
-*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 03rd jul 2002
+*<A NAME="VS_help.txt"></A><B>VS_help.txt</B>*	For Vim version 5.7.+	Last change: 18th jul 2002
 
+*<A NAME="lhVimSpell"></A><B>lhVimSpell</B>*
 		<A HREF="#VIM">VIM</A> Spell Plugin MANUAL	by Luc Hermitte
-			VIM-Spell version 0.3
+			VIM-Spell version 0.3b
 
 
 ------------------------------------------------------------------------------
@@ -215,6 +216,19 @@ instance :
   Display or hide a several lines help message that sums up the different
   key-bindings used within the Corrector Mode.
 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+<B><FONT COLOR="PURPLE">  Filetypes supported</FONT></B>
+
+<A HREF="#Aspell">Aspell</A> may not correctly parse every type of file as it is only aware of TeX
+syntax, html/sgml-like syntax and URLs.
+
+However, not every word will be highlighted, but only those that are &quot;tagged&quot;
+to be misspellable. At this time, only TeX, HTML, cs, dtml, m4 and Java files
+will correctly highlight misspellings ; and every other filetype whose <A HREF="#VIM">VIM</A>
+syntax file (|<A HREF="intro.html#syn-files">syn-files</A>|) &quot;exports&quot; the '@Spell' |<A HREF="intro.html#cluster">cluster</A>|. It is accomplished
+by declaring that some appropriated syntax items (typically comments and text
+zones) constain (|<A HREF="intro.html#syn-contains">syn-contains</A>|) or add the cluster '@Spell'.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 <B><FONT COLOR="PURPLE">  Internal considerations</FONT></B>
@@ -437,6 +451,7 @@ loaded before, or even after, VIM-Spell.
     &#42; Extension to other file types : extend the file-type2mode recognition
       function ; only TeX, ML-like and None/url are recognized for now.
       Actually, I do support only the formats supported by <A HREF="#Aspell">Aspell</A>.
+    &#42; Permit to toggle the highlighting of misspellings within TeXgroups
     &#42; Wrap other functions exclusives to <A HREF="#Aspell">Aspell</A> (e.g. sounds-like words and
       lists of words, phonemes, score between words)
     &#42; <A HREF="#Add">Add</A> <A HREF="#g:VS_language">g:VS_language</A> to the names of cached files.
@@ -444,6 +459,8 @@ loaded before, or even after, VIM-Spell.
       cached misspellings.
     &#42; Improve the customization possibilities of the mappings -- some people
       like mappings starting with backslashes.
+    &#42; Remove the possible ambiguities coming from the tags' names of this help
+      file.
 
     &#42; Better handling of the splitted window for a more ergonomic plugin.
     &#42; Option for vertical splitting of window with vim6 ; could be nicest.
@@ -538,6 +555,9 @@ loaded before, or even after, VIM-Spell.
      the next one, - add them to the |IA-spell|'s dictionary, - ignore them, 
      - and see a list of alternative words.
 	<A HREF="http://www.fleiner.com/vim/spell.html">http://www.fleiner.com/vim/spell.html</A>
+     BTW, it seems that Claudio Fleiner has written most of his syntax files
+     with spellchecking concerns in mind. Thanks to him, having a correct
+     highlighting policy for these types of files is a piece of cake. :-))
     
 
     Dr. Charles E. Campbell, Jr.'s engspchk.vim.	*<A NAME="engspchk"></A><B>engspchk</B>*

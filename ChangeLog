@@ -1,6 +1,17 @@
 ChangeLog File for Vim-Spell
 ----------------------------
 
+Ver 0.3b: 18th jul 2002
+* When there is no misspelling, there is no more error message displayed
+* The syntax highlighting rules for HTML files have been enhanced 
+  -> syn cluster Spell add=SpellErrors,Normal
+  Actually, it should work fine with other type of files : cs, dtml, java and
+  m4 files ; Thanks to the maintainers of the corresponding syntax files and
+  in particulary Claudio Fleiner.
+  They have also been altered for TeX files : misspellings between TeX groups
+  will be highlighted even if they are not true words.
+* Help file updated
+
 Ver 0.3: 03rd jul 2002
 * First functional release of a non developper version
 * Options more accessible
